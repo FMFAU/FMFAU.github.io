@@ -30,7 +30,29 @@
     }
     .modal-content {
       max-height: 80vh;
-      overflow-y: hidden;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      padding-right: 8px;
+    }
+    .dark .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    .dark .modal-content::-webkit-scrollbar-track {
+      background: #1f2937;
+    }
+    .dark .modal-content::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 4px;
+    }
+    .light .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    .light .modal-content::-webkit-scrollbar-track {
+      background: #e5e7eb;
+    }
+    .light .modal-content::-webkit-scrollbar-thumb {
+      background: #9ca3af;
+      border-radius: 4px;
     }
     .score-container {
       position: relative;
@@ -45,30 +67,14 @@
       font-size: 14px;
       font-weight: 600;
     }
-    #modalCast {
-      max-height: 200px;
-      overflow-y: auto;
-      scrollbar-width: thin;
+    .skeleton {
+      background-color: #4b5563;
+      animation: pulse 1.5s ease-in-out infinite;
     }
-    .dark #modalCast::-webkit-scrollbar {
-      width: 8px;
-    }
-    .dark #modalCast::-webkit-scrollbar-track {
-      background: #1f2937;
-    }
-    .dark #modalCast::-webkit-scrollbar-thumb {
-      background: #4b5563;
-      border-radius: 4px;
-    }
-    .light #modalCast::-webkit-scrollbar {
-      width: 8px;
-    }
-    .light #modalCast::-webkit-scrollbar-track {
-      background: #e5e7eb;
-    }
-    .light #modalCast::-webkit-scrollbar-thumb {
-      background: #9ca3af;
-      border-radius: 4px;
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
     }
   </style>
 </head>
@@ -82,6 +88,7 @@
         </button>
         <button id="historyBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Search History</button>
         <button id="favouritesBtn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">Favourites</button>
+        <button id="recentlyWatchedBtn" class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition">Recently Watched</button>
       </div>
     </div>
     <div class="flex justify-center mb-10">
@@ -120,7 +127,7 @@
         <p id="modalRelease" class="text-gray-400 dark:text-gray-400 light:text-gray-600"></p>
       </div>
       <h3 class="text-lg font-semibold text-white dark:text-white light:text-gray-900 mb-2">Cast</h3>
-      <div id="modalCast" class="grid grid-cols-2 gap-4"></div>
+      <div id="modalCast" class="grid grid-cols-2 gap-4 mb-4"></div>
     </div>
   </div>
 
@@ -148,9 +155,21 @@
     </div>
   </div>
 
+  <div id="recentlyWatchedModal" class="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-60 light:bg-opacity-40 hidden flex items-center justify-center z-50">
+    <div class="bg-gray-800 dark:bg-gray-800 light:bg-white rounded-xl p-6 w-full max-w-md shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-white dark:text-white light:text-gray-900">Recently Watched</h2>
+        <button id="closeRecentlyWatchedModal" class="p-2 rounded-full bg-gray-700 dark:bg-gray-700 light:bg-gray-200 hover:bg-gray-600 dark:hover:bg-gray-600 light:hover:bg-gray-300 transition">
+          <svg class="w-6 h-6 text-white dark:text-white light:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <ul id="recentlyWatchedList" class="text-gray-300 dark:text-gray-300 light:text-gray-700"></ul>
+    </div>
+  </div>
+
   <script>
     const apiKey = '9adc0bbf543673c5fb45ab24a36599e1';
-    const streamBaseUrl = 'https://fmfau.github.io/Player.php';
+    const streamBaseUrl = 'https://multiembed.mov/directstream.php';
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
     const resultsDiv = document.getElementById('results');
@@ -176,6 +195,10 @@
     const favouritesModal = document.getElementById('favouritesModal');
     const closeFavouritesModal = document.getElementById('closeFavouritesModal');
     const favouritesList = document.getElementById('favouritesList');
+    const recentlyWatchedBtn = document.getElementById('recentlyWatchedBtn');
+    const recentlyWatchedModal = document.getElementById('recentlyWatchedModal');
+    const closeRecentlyWatchedModal = document.getElementById('closeRecentlyWatchedModal');
+    const recentlyWatchedList = document.getElementById('recentlyWatchedList');
 
     let currentItem = null;
 
@@ -196,6 +219,44 @@
       themeIcon.innerHTML = theme === 'dark' ? 
         '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />' :
         '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />';
+    }
+
+    // Skeleton loader for trending
+    function displaySkeletonLoader() {
+      resultsDiv.innerHTML = '';
+      for (let i = 0; i < 12; i++) { // Show 12 skeleton cards
+        const card = document.createElement('div');
+        card.className = 'relative bg-gray-900 dark:bg-gray-900 light:bg-white rounded-lg overflow-hidden shadow-lg';
+        card.innerHTML = `
+          <div class="relative">
+            <div class="w-full h-[450px] skeleton rounded-t-lg"></div>
+            <div class="absolute bottom-2 right-2 w-14 h-14">
+              <div class="w-full h-full skeleton rounded-full"></div>
+            </div>
+          </div>
+          <div class="p-4">
+            <div class="h-6 w-3/4 skeleton rounded mb-2"></div>
+            <div class="h-4 w-1/2 skeleton rounded"></div>
+          </div>
+        `;
+        resultsDiv.appendChild(card);
+      }
+    }
+
+    // Fetch trending movies/series
+    async function fetchTrending() {
+      displaySkeletonLoader();
+      try {
+        const allResults = [];
+        for (let page = 1; page <= 3; page++) { // Fetch 3 pages (~60 items, filter to 50)
+          const response = await fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=${apiKey}&page=${page}`);
+          const data = await response.json();
+          allResults.push(...data.results);
+        }
+        displayResults(allResults.slice(0, 50)); // Display top 50
+      } catch (error) {
+        resultsDiv.innerHTML = '<p class="text-center text-red-500 col-span-full">Error fetching trending content. Please try again.</p>';
+      }
     }
 
     // Search handling
@@ -280,13 +341,16 @@
       favouriteIcon.classList.toggle('fill-current', isFavourited);
       favouriteIcon.classList.toggle('text-yellow-400', isFavourited);
 
+      // Save to recently watched
+      saveRecentlyWatched(item);
+
       // Fetch cast
       modalCast.innerHTML = '<p class="text-gray-400 dark:text-gray-400 light:text-gray-600">Loading cast...</p>';
       try {
         const endpoint = item.media_type === 'movie' ? `movie/${item.id}` : `tv/${item.id}`;
         const response = await fetch(`https://api.themoviedb.org/3/${endpoint}/credits?api_key=${apiKey}`);
         const data = await response.json();
-        displayCast(data.cast.slice(0, 8)); // Increased to 8 for more cast members
+        displayCast(data.cast.slice(0, 8));
       } catch (error) {
         modalCast.innerHTML = '<p class="text-red-500">Error loading cast.</p>';
       }
@@ -312,7 +376,7 @@
 
     closeModal.addEventListener('click', () => {
       modal.classList.add('hidden');
-      document.body.style.overflow = ''; // Restore main page scrolling
+      document.body.style.overflow = '';
     });
 
     favouriteBtn.addEventListener('click', () => {
@@ -336,15 +400,14 @@
     });
 
     streamBtn.addEventListener('click', () => {
-        if (!currentItem) return;
-            const theme = Cookies.get('theme') || 'dark';
-            let streamUrl = `${streamBaseUrl}?video_id=${currentItem.id}&tmdb=1&theme=${theme}`;
-            if (currentItem.media_type === 'tv') {
-                streamUrl += '&s=1&e=1';
-            }
-            window.open(streamUrl, '_blank');
-        }
-    );
+      if (!currentItem) return;
+      const theme = Cookies.get('theme') || 'dark';
+      let streamUrl = `${streamBaseUrl}?video_id=${currentItem.id}&tmdb=1&theme=${theme}`;
+      if (currentItem.media_type === 'tv') {
+        streamUrl += '&s=1&e=1';
+      }
+      window.open(streamUrl, '_blank');
+    });
 
     function getScoreColor(score) {
       const hue = (score * 12);
@@ -421,7 +484,7 @@
             const endpoint = fav.media_type === 'movie' ? `movie/${fav.id}` : `tv/${fav.id}`;
             const response = await fetch(`https://api.themoviedb.org/3/${endpoint}?api_key=${apiKey}`);
             const data = await response.json();
-            data.media_type = fav.media_type; // Preserve media_type
+            data.media_type = fav.media_type;
             openModal(data);
             favouritesModal.classList.add('hidden');
           } catch (error) {
@@ -432,6 +495,68 @@
         favouritesList.appendChild(li);
       }
     }
+
+    // Recently Watched
+    function saveRecentlyWatched(item) {
+      const recentlyWatched = JSON.parse(Cookies.get('recentlyWatched') || '[]');
+      const itemData = {
+        id: item.id,
+        media_type: item.media_type,
+        title: item.title || item.name,
+        poster_path: item.poster_path
+      };
+      const exists = recentlyWatched.some(watched => watched.id === item.id && watched.media_type === item.media_type);
+      if (!exists) {
+        recentlyWatched.unshift(itemData);
+        if (recentlyWatched.length > 10) recentlyWatched.pop();
+        Cookies.set('recentlyWatched', JSON.stringify(recentlyWatched), { expires: 365 });
+      }
+      updateRecentlyWatchedModal();
+    }
+
+    recentlyWatchedBtn.addEventListener('click', () => {
+      updateRecentlyWatchedModal();
+      recentlyWatchedModal.classList.remove('hidden');
+    });
+
+    closeRecentlyWatchedModal.addEventListener('click', () => {
+      recentlyWatchedModal.classList.add('hidden');
+    });
+
+    async function updateRecentlyWatchedModal() {
+      const recentlyWatched = JSON.parse(Cookies.get('recentlyWatched') || '[]');
+      recentlyWatchedList.innerHTML = '';
+      if (recentlyWatched.length === 0) {
+        recentlyWatchedList.innerHTML = '<p>No recently watched items.</p>';
+        return;
+      }
+      for (const watched of recentlyWatched) {
+        const li = document.createElement('li');
+        li.className = 'flex items-center gap-4 mb-2';
+        const img = watched.poster_path ? `https://image.tmdb.org/t/p/w92${watched.poster_path}` : 'https://via.placeholder.com/92x138?text=No+Image';
+        li.innerHTML = `
+          <img src="${img}" alt="${watched.title}" class="w-12 h-18 object-cover rounded" />
+          <span class="cursor-pointer hover:text-blue-500 transition">${watched.title}</span>
+        `;
+        li.addEventListener('click', async () => {
+          try {
+            const endpoint = watched.media_type === 'movie' ? `movie/${watched.id}` : `tv/${watched.id}`;
+            const response = await fetch(`https://api.themoviedb.org/3/${endpoint}?api_key=${apiKey}`);
+            const data = await response.json();
+            data.media_type = watched.media_type;
+            openModal(data);
+            recentlyWatchedModal.classList.add('hidden');
+          } catch (error) {
+            console.error('Error fetching recently watched details:', error);
+            recentlyWatchedList.innerHTML = '<p class="text-red-500">Error loading item.</p>';
+          }
+        });
+        recentlyWatchedList.appendChild(li);
+      }
+    }
+
+    // Load trending content on page load
+    fetchTrending();
   </script>
 </body>
 </html>
