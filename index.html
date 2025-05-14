@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Movie Search</title>
-  <meta property="og:site_name" content="Movie Search" />
+  <title>FMFAU-FreeMediaForAllUsers</title>
+  <meta property="og:site_name" content="FMFAU-FreeMediaForAllUsers" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://via.placeholder.com/500x750?text=No+Image" id="ogImage" />
+  <meta property="og:image" content="https://FMFAU.github.io/Images/Logo.png" id="ogImage" />
   <meta property="og:title" content="Movie Search" id="ogTitle" />
   <meta property="og:description" content="Search and watch movies and series!" id="ogDescription" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-  <style>
+<style>
     body {
       transition: background-color 0.3s, color 0.3s;
     }
@@ -35,29 +35,7 @@
     }
     .modal-content {
       max-height: 80vh;
-      overflow-y: auto;
-      scrollbar-width: thin;
       padding-right: 8px;
-    }
-    .dark .modal-content::-webkit-scrollbar {
-      width: 8px;
-    }
-    .dark .modal-content::-webkit-scrollbar-track {
-      background: #1f2937;
-    }
-    .dark .modal-content::-webkit-scrollbar-thumb {
-      background: #4b5563;
-      border-radius: 4px;
-    }
-    .light .modal-content::-webkit-scrollbar {
-      width: 8px;
-    }
-    .light .modal-content::-webkit-scrollbar-track {
-      background: #e5e7eb;
-    }
-    .light .modal-content::-webkit-scrollbar-thumb {
-      background: #9ca3af;
-      border-radius: 4px;
     }
     .score-container {
       position: relative;
@@ -124,7 +102,7 @@
     }
     .tooltip {
       visibility: hidden;
-      position: fixed; /* Changed to fixed to position relative to viewport */
+      position: fixed;
       background-color: #1f2937;
       color: #fff;
       text-align: center;
@@ -132,7 +110,7 @@
       border-radius: 4px;
       font-size: 12px;
       white-space: nowrap;
-      z-index: 100; /* Increased z-index to ensure it appears above modal */
+      z-index: 100;
       transition: opacity 0.2s ease;
       opacity: 0;
     }
@@ -150,13 +128,20 @@
       border-style: solid;
       border-color: #1f2937 transparent transparent transparent;
     }
+    .logo-container img {
+      height: 40px;
+      margin-right: 10px;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center px-4 py-6">
   <div id="offlineMessage">Offline Mode: Using cached data. Some features may be limited.</div>
   <div class="w-full max-w-6xl">
     <div class="flex justify-between items-center mb-8">
-      <h1 class="text-4xl font-extrabold text-center dark:text-white light:text-black">🎬 Movie & Series Search</h1>
+      <div class="logo-container">
+        <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt="TMDB Logo" />
+        <img src="https://fmfau.github.io/Images/Logo%20Tran.png" alt="Custom Logo" />
+      </div>
       <div class="flex items-center gap-4">
         <button id="themeToggle" class="p-2 rounded-full bg-gray-700 dark:bg-gray-700 light:bg-gray-300 text-white dark:text-white light:text-gray-900 hover:bg-gray-600 dark:hover:bg-gray-600 light:hover:bg-gray-400 transition">
           <svg id="themeIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
