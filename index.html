@@ -602,19 +602,17 @@
       shareModal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
       const theme = Cookies.get('theme') || 'dark';
-      let streamUrl = `${streamBaseUrl}?video_id=${currentItem.id}&tmdb=1&theme=${theme}`;
       let shareUrl = `${baseShareUrl}?id=${currentItem.id}&type=${currentItem.media_type}`;
       let title = currentItem.title || currentItem.name;
       let type = currentItem.media_type === 'tv' ? 'Series' : 'Movie';
-      let description = `${title} - Watch here at ${streamUrl}`;
+      let description = `${title} - Watch here at ${shareUrl}`;
       let image = currentItem.poster_path ? `https://image.tmdb.org/t/p/w500${currentItem.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
 
       if (currentItem.media_type === 'tv') {
-        streamUrl += `&s=${selectedSeason}&e=${selectedEpisode}`;
         shareUrl += `&s=${selectedSeason}&e=${selectedEpisode}`;
         const episodeDetails = await getEpisodeDetails(currentItem.id, selectedSeason, selectedEpisode);
         title = `Series, S${selectedSeason}E${selectedEpisode}: ${episodeDetails.name}`;
-        description = `${currentItem.name} - Watch here at ${streamUrl}`;
+        description = `${currentItem.name} - Watch here at ${shareUrl}`;
       }
 
       // Update OG tags for Discord embed
@@ -836,17 +834,16 @@
           data.media_type = type;
 
           // Update OG tags for deep link
-          const theme = Cookies.get('theme') || 'dark';
-          let streamUrl = `${streamBaseUrl}?video_id=${id}&tmdb=1&theme=${theme}`;
+          let shareUrl = `${baseShareUrl}?id=${id}&type=${type}`;
           let title = data.title || data.name;
-          let description = `${title} - Watch here at ${streamUrl}`;
+          let description = `${title} - Watch here at ${shareUrl}`;
           let image = data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
 
           if (type === 'tv') {
-            streamUrl += `&s=${season}&e=${episode}`;
+            shareUrl += `&s=${season}&e=${episode}`;
             const episodeDetails = await getEpisodeDetails(id, season, episode);
             title = `Series, S${season}E${episode}: ${episodeDetails.name}`;
-            description = `${data.name} - Watch here at ${streamUrl}`;
+            description = `${data.name} - Watch here at ${shareUrl}`;
           }
 
           ogImage.setAttribute('content', image);
