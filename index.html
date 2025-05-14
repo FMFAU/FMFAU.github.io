@@ -606,7 +606,7 @@
       let shareUrl = `${baseShareUrl}?id=${currentItem.id}&type=${currentItem.media_type}`;
       let title = currentItem.title || currentItem.name;
       let type = currentItem.media_type === 'tv' ? 'Series' : 'Movie';
-      let description = `Watch here at ${streamUrl}`;
+      let description = `${title} - Watch here at ${streamUrl}`;
       let image = currentItem.poster_path ? `https://image.tmdb.org/t/p/w500${currentItem.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
 
       if (currentItem.media_type === 'tv') {
@@ -614,7 +614,7 @@
         shareUrl += `&s=${selectedSeason}&e=${selectedEpisode}`;
         const episodeDetails = await getEpisodeDetails(currentItem.id, selectedSeason, selectedEpisode);
         title = `Series, S${selectedSeason}E${selectedEpisode}: ${episodeDetails.name}`;
-        description = `Watch ${currentItem.name} S${selectedSeason}E${selectedEpisode} at ${streamUrl}`;
+        description = `${currentItem.name} - Watch here at ${streamUrl}`;
       }
 
       // Update OG tags for Discord embed
@@ -639,7 +639,7 @@
 
       shareTwitter.onclick = () => {
         const text = currentItem.media_type === 'tv' ? 
-          `Watching ${currentItem.name} S${selectedSeason}E${selectedEpisode} on Movie Search!` : 
+          `Watching ${currentItem.name} S${selectedSeason}E${selectedEpisode}: ${title.split(': ')[1]} on Movie Search!` : 
           `Check out ${currentItem.title || currentItem.name} on Movie Search!`;
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
         shareModal.classList.add('hidden');
@@ -834,6 +834,25 @@
           const response = await fetch(`https://api.themoviedb.org/3/${endpoint}?api_key=${apiKey}`);
           const data = await response.json();
           data.media_type = type;
+
+          // Update OG tags for deep link
+          const theme = Cookies.get('theme') || 'dark';
+          let streamUrl = `${streamBaseUrl}?video_id=${id}&tmdb=1&theme=${theme}`;
+          let title = data.title || data.name;
+          let description = `${title} - Watch here at ${streamUrl}`;
+          let image = data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
+
+          if (type === 'tv') {
+            streamUrl += `&s=${season}&e=${episode}`;
+            const episodeDetails = await getEpisodeDetails(id, season, episode);
+            title = `Series, S${season}E${episode}: ${episodeDetails.name}`;
+            description = `${data.name} - Watch here at ${streamUrl}`;
+          }
+
+          ogImage.setAttribute('content', image);
+          ogTitle.setAttribute('content', title);
+          ogDescription.setAttribute('content', description);
+
           openModal(data, season, episode);
         } catch (error) {
           console.error('Error loading deep link:', error);
