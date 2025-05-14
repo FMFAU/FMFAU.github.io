@@ -122,6 +122,34 @@
       border-radius: 8px;
       z-index: 1000;
     }
+    .tooltip {
+      visibility: hidden;
+      position: fixed; /* Changed to fixed to position relative to viewport */
+      background-color: #1f2937;
+      color: #fff;
+      text-align: center;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 100; /* Increased z-index to ensure it appears above modal */
+      transition: opacity 0.2s ease;
+      opacity: 0;
+    }
+    .relative:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+    .relative .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: #1f2937 transparent transparent transparent;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center px-4 py-6">
@@ -163,25 +191,46 @@
       <div class="flex justify-between items-center mb-4">
         <h2 id="modalTitle" class="text-2xl font-bold text-white dark:text-white light:text-gray-900"></h2>
         <div class="flex items-center gap-2">
-          <button id="favouriteBtn" class="p-2 rounded-full bg-gray-700 dark:bg-gray-700 light:bg-gray-200 hover:bg-gray-600 dark:hover:bg-gray-600 light:hover:bg-gray-300 transition">
-            <svg id="favouriteIcon" class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
-          </button>
-          <button id="shareBtn" class="p-2 rounded-full bg-blue-600 hover:bg-blue-700 transition">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-          </button>
-          <button id="streamBtn" class="p-2 rounded-full bg-green-600 hover:bg-green-700 transition">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.2A1 1 0 0010 9.768v4.464a1 1 0 001.555.832l3.197-2.2a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          </button>
-          <button id="playTrailerBtn" class="p-2 rounded-full bg-red-600 hover:bg-red-700 transition hidden">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.2A1 1 0 0010 9.768v4.464a1 1 0 001.555.832l3.197-2.2a1 1 0 000-1.664z" /></svg>
-          </button>
-          <button id="closeModal" class="p-2 rounded-full bg-gray-700 dark:bg-gray-700 light:bg-gray-200 hover:bg-gray-600 dark:hover:bg-gray-600 light:hover:bg-gray-300 transition">
-            <svg class="w-6 h-6 text-white dark:text-white light:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
+          <div class="relative">
+            <button id="favouriteBtn" class="p-2 rounded-full bg-gray-700 dark:bg-gray-700 light:bg-gray-200 hover:bg-gray-600 dark:hover:bg-gray-600 light:hover:bg-gray-300 transition">
+              <svg id="favouriteIcon" class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+            </button>
+            <span class="tooltip left-1/2">Favourite</span>
+          </div>
+          <div class="relative">
+            <button id="shareBtn" class="p-2 rounded-full bg-blue-600 hover:bg-blue-700 transition">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+            </button>
+            <span class="tooltip left-1/2">Share</span>
+          </div>
+          <div class="relative">
+            <button id="streamBtn" class="p-2 rounded-full bg-green-600 hover:bg-green-700 transition">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.2A1 1 0 0010 9.768v4.464a1 1 0 001.555.832l3.197-2.2a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </button>
+            <span class="tooltip left-1/2">Stream</span>
+          </div>
+          <div class="relative">
+            <button id="playTrailerBtn" class="p-2 rounded-full bg-red-600 hover:bg-red-700 transition hidden">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.2A1 1 0 0010 9.768v4.464a1 1 0 001.555.832l3.197-2.2a1 1 0 000-1.664z" /></svg>
+            </button>
+            <span class="tooltip left-1/2">Trailer</span>
+          </div>
+          <div class="relative">
+            <button id="closeModal" class="p-2 rounded-full bg-gray-700 dark:bg-gray-700 light:bg-gray-200 hover:bg-gray-600 dark:hover:bg-gray-600 light:hover:bg-gray-300 transition">
+              <svg class="w-6 h-6 text-white dark:text-white light:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <span class="tooltip left-1/2">Close</span>
+          </div>
         </div>
       </div>
       <img id="modalPoster" class="w-full h-64 object-cover rounded-lg mb-4" alt="Poster" />
       <p id="modalDescription" class="text-gray-300 dark:text-gray-300 light:text-gray-700 mb-4"></p>
+      <div id="trailerSection" class="hidden mb-4">
+        <h3 class="text-lg font-semibold text-white dark:text-white light:text-gray-900 mb-2">Trailer</h3>
+        <div class="relative w-full" style="padding-bottom: 56.25%;">
+          <iframe id="trailerIframe" class="absolute top-0 left-0 w-full h-full rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
       <div class="flex items-center mb-4">
         <div class="score-container mr-4">
           <svg class="score-ring w-full h-full">
@@ -311,6 +360,8 @@
     const sharePreviewDescription = document.getElementById('sharePreviewDescription');
     const streamBtn = document.getElementById('streamBtn');
     const playTrailerBtn = document.getElementById('playTrailerBtn');
+    const trailerSection = document.getElementById('trailerSection');
+    const trailerIframe = document.getElementById('trailerIframe');
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
     const historyBtn = document.getElementById('historyBtn');
@@ -342,6 +393,7 @@
     let genres = { movie: [], tv: [] };
     let lastSearchResults = [];
     const CACHE_KEY = 'cachedMediaData';
+    let isTrailerPlaying = false;
 
     // Theme handling
     const savedTheme = Cookies.get('theme') || 'dark';
@@ -588,6 +640,11 @@
       modalScoreCircle.setAttribute('stroke', strokeColor);
       modalScoreCircle.setAttribute('stroke-dasharray', `${scorePercent * 1.5}, 150`);
 
+      // Reset trailer state
+      trailerSection.classList.add('hidden');
+      trailerIframe.src = '';
+      isTrailerPlaying = false;
+
       // Update favourite button
       const favourites = JSON.parse(Cookies.get('favourites') || '[]');
       const isFavourited = favourites.some(fav => fav.id === item.id && fav.media_type === item.media_type);
@@ -622,7 +679,15 @@
           if (trailer) {
             playTrailerBtn.classList.remove('hidden');
             playTrailerBtn.onclick = () => {
-              window.open(`https://www.youtube.com/watch?v=${trailer.key}`, '_blank');
+              if (isTrailerPlaying) {
+                trailerSection.classList.add('hidden');
+                trailerIframe.src = '';
+                isTrailerPlaying = false;
+              } else {
+                trailerIframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
+                trailerSection.classList.remove('hidden');
+                isTrailerPlaying = true;
+              }
             };
           } else {
             playTrailerBtn.classList.add('hidden');
@@ -736,6 +801,9 @@
     closeModal.addEventListener('click', () => {
       modal.classList.add('hidden');
       document.body.style.overflow = '';
+      trailerSection.classList.add('hidden');
+      trailerIframe.src = '';
+      isTrailerPlaying = false;
       resetOgTags();
     });
 
