@@ -599,64 +599,63 @@
     });
 
     async function updateShareModal() {
-      shareModal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-      const theme = Cookies.get('theme') || 'dark';
-      let shareUrl = `${baseShareUrl}?id=${currentItem.id}&type=${currentItem.media_type}`;
-      let title = currentItem.title || currentItem.name;
-      let type = currentItem.media_type === 'tv' ? 'Series' : 'Movie';
-      let description = `${title} - Watch here at ${shareUrl}`;
-      let image = currentItem.poster_path ? `https://image.tmdb.org/t/p/w500${currentItem.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
+    shareModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    let shareUrl = `${baseShareUrl}?id=${currentItem.id}&type=${currentItem.media_type}`;
+    let title = currentItem.title || currentItem.name;
+    let type = currentItem.media_type === 'tv' ? 'Series' : 'Movie';
+    let description = `${title} - Watch here at ${shareUrl}`;
+    let image = currentItem.poster_path ? `https://image.tmdb.org/t/p/w500${currentItem.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
 
-      if (currentItem.media_type === 'tv') {
+    if (currentItem.media_type === 'tv') {
         shareUrl += `&s=${selectedSeason}&e=${selectedEpisode}`;
         const episodeDetails = await getEpisodeDetails(currentItem.id, selectedSeason, selectedEpisode);
         title = `Series, S${selectedSeason}E${selectedEpisode}: ${episodeDetails.name}`;
         description = `${currentItem.name} - Watch here at ${shareUrl}`;
-      }
+    }
 
-      // Update OG tags for Discord embed
-      ogImage.setAttribute('content', image);
-      ogTitle.setAttribute('content', title);
-      ogDescription.setAttribute('content', description);
+    // Update OG tags for Discord embed
+    ogImage.setAttribute('content', image);
+    ogTitle.setAttribute('content', title);
+    ogDescription.setAttribute('content', description);
 
-      // Update preview
-      sharePreviewImage.src = currentItem.poster_path ? `https://image.tmdb.org/t/p/w92${currentItem.poster_path}` : 'https://via.placeholder.com/92x138?text=No+Image';
-      sharePreviewType.textContent = type;
-      sharePreviewTitle.textContent = title;
-      sharePreviewDescription.textContent = description;
+    // Update preview to match Discord embed
+    sharePreviewImage.src = currentItem.poster_path ? `https://image.tmdb.org/t/p/w92${currentItem.poster_path}` : 'https://via.placeholder.com/92x138?text=No+Image';
+    sharePreviewType.textContent = type;
+    sharePreviewTitle.textContent = title;
+    sharePreviewDescription.textContent = description;
 
-      // Share handlers
-      shareDiscord.onclick = () => {
+    // Share handlers
+    shareDiscord.onclick = () => {
         navigator.clipboard.writeText(shareUrl).then(() => {
-          alert('Link copied! Paste it in Discord to share.');
-          shareModal.classList.add('hidden');
-          document.body.style.overflow = currentItem ? 'hidden' : '';
+        alert('Link copied! Paste it in Discord to share.');
+        shareModal.classList.add('hidden');
+        document.body.style.overflow = currentItem ? 'hidden' : '';
         });
-      };
+    };
 
-      shareTwitter.onclick = () => {
+    shareTwitter.onclick = () => {
         const text = currentItem.media_type === 'tv' ? 
-          `Watching ${currentItem.name} S${selectedSeason}E${selectedEpisode}: ${title.split(': ')[1]} on Movie Search!` : 
-          `Check out ${currentItem.title || currentItem.name} on Movie Search!`;
+        `Watching ${currentItem.name} S${selectedSeason}E${selectedEpisode}: ${title.split(': ')[1]} on Movie Search!` : 
+        `Check out ${currentItem.title || currentItem.name} on Movie Search!`;
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
         shareModal.classList.add('hidden');
         document.body.style.overflow = currentItem ? 'hidden' : '';
-      };
+    };
 
-      shareFacebook.onclick = () => {
+    shareFacebook.onclick = () => {
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
         shareModal.classList.add('hidden');
         document.body.style.overflow = currentItem ? 'hidden' : '';
-      };
+    };
 
-      copyLink.onclick = () => {
+    copyLink.onclick = () => {
         navigator.clipboard.writeText(shareUrl).then(() => {
-          alert('Link copied to clipboard!');
-          shareModal.classList.add('hidden');
-          document.body.style.overflow = currentItem ? 'hidden' : '';
+        alert('Link copied to clipboard!');
+        shareModal.classList.add('hidden');
+        document.body.style.overflow = currentItem ? 'hidden' : '';
         });
-      };
+    };
     }
 
     function resetOgTags() {
@@ -820,44 +819,43 @@
 
     // Handle deep linking from share URLs
     async function handleDeepLink() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
-      const type = params.get('type');
-      const season = parseInt(params.get('s') || '1');
-      const episode = parseInt(params.get('e') || '1');
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const type = params.get('type');
+    const season = parseInt(params.get('s') || '1');
+    const episode = parseInt(params.get('e') || '1');
 
-      if (id && (type === 'movie' || type === 'tv')) {
+    if (id && (type === 'movie' || type === 'tv')) {
         try {
-          const endpoint = type === 'movie' ? `movie/${id}` : `tv/${id}`;
-          const response = await fetch(`https://api.themoviedb.org/3/${endpoint}?api_key=${apiKey}`);
-          const data = await response.json();
-          data.media_type = type;
+        const endpoint = type === 'movie' ? `movie/${id}` : `tv/${id}`;
+        const response = await fetch(`https://api.themoviedb.org/3/${endpoint}?api_key=${apiKey}`);
+        const data = await response.json();
+        data.media_type = type;
 
-          // Update OG tags for deep link
-          let shareUrl = `${baseShareUrl}?id=${id}&type=${type}`;
-          let title = data.title || data.name;
-          let description = `${title} - Watch here at ${shareUrl}`;
-          let image = data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
+        // Set OG tags immediately for Discord crawler
+        let shareUrl = `${baseShareUrl}?id=${id}&type=${type}`;
+        let title = data.title || data.name;
+        let description = `${title} - Watch here at ${shareUrl}`;
+        let image = data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
 
-          if (type === 'tv') {
+        if (type === 'tv') {
             shareUrl += `&s=${season}&e=${episode}`;
             const episodeDetails = await getEpisodeDetails(id, season, episode);
             title = `Series, S${season}E${episode}: ${episodeDetails.name}`;
             description = `${data.name} - Watch here at ${shareUrl}`;
-          }
-
-          ogImage.setAttribute('content', image);
-          ogTitle.setAttribute('content', title);
-          ogDescription.setAttribute('content', description);
-
-          openModal(data, season, episode);
-        } catch (error) {
-          console.error('Error loading deep link:', error);
         }
-      }
+
+        ogImage.setAttribute('content', image);
+        ogTitle.setAttribute('content', title);
+        ogDescription.setAttribute('content', description);
+
+        openModal(data, season, episode);
+        } catch (error) {
+        console.error('Error loading deep link:', error);
+        }
+    }
     }
 
-    // Load trending content and handle deep links on page load
     fetchTrending();
     handleDeepLink();
   </script>
