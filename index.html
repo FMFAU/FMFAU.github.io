@@ -11,7 +11,7 @@
   <meta property="og:description" content="Search and watch movies and series!" id="ogDescription" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-<style>
+  <style>
     body {
       transition: background-color 0.3s, color 0.3s;
     }
@@ -34,8 +34,11 @@
       backdrop-filter: blur(8px);
     }
     .modal-content {
-      max-height: 80vh;
+      max-height: 90vh; /* Adjusted for mobile */
       padding-right: 8px;
+      width: 90%; /* Ensure modal doesn't overflow on mobile */
+      max-width: 2xl; /* Maintain max-width for larger screens */
+      overflow-y: auto; /* Allow scrolling within modal */
     }
     .score-container {
       position: relative;
@@ -99,6 +102,9 @@
       padding: 8px 16px;
       border-radius: 8px;
       z-index: 1000;
+      font-size: 14px; /* Smaller font for mobile */
+      max-width: 90%; /* Prevent overflow on mobile */
+      text-align: center;
     }
     .tooltip {
       visibility: hidden;
@@ -128,13 +134,98 @@
       border-style: solid;
       border-color: #1f2937 transparent transparent transparent;
     }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
     .logo-container img {
       height: 40px;
+      width: auto;
       margin-right: 10px;
     }
     .logo-container2 img {
       height: 150px;
-      margin-right: 100px;
+      width: auto;
+      margin-right: 10px;
+    }
+    /* Responsive adjustments for mobile */
+    @media (max-width: 640px) {
+      .logo-container img {
+        height: 30px; /* Smaller logo on mobile */
+        margin-right: 5px;
+      }
+      .logo-container2 img {
+        height: 80px; /* Smaller custom logo on mobile */
+        margin-right: 5px;
+      }
+      .flex.justify-between.items-center.mb-8 {
+        flex-direction: column; /* Stack header elements on mobile */
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .flex.items-center.gap-4 {
+        flex-wrap: wrap; /* Allow buttons to wrap on mobile */
+        justify-content: center;
+        width: 100%;
+      }
+      #results {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Smaller cards on mobile */
+      }
+      .modal-content {
+        width: 95%; /* Slightly wider on very small screens */
+        padding: 12px; /* Smaller padding on mobile */
+      }
+      #modalPoster {
+        height: 200px; /* Smaller poster in modal on mobile */
+      }
+      #modalCast {
+        grid-template-columns: 1fr; /* Single column for cast on mobile */
+      }
+      #episodeList {
+        max-height: 200px; /* Smaller episode list height on mobile */
+      }
+      .text-2xl {
+        font-size: 1.25rem; /* Smaller modal title on mobile */
+      }
+      .text-lg {
+        font-size: 1rem; /* Smaller headings on mobile */
+      }
+      .text-sm {
+        font-size: 0.75rem; /* Smaller text on mobile */
+      }
+      .text-xs {
+        font-size: 0.65rem; /* Smaller text on mobile */
+      }
+      #searchInput {
+        font-size: 0.875rem; /* Smaller font in search input */
+        padding: 8px; /* Smaller padding */
+      }
+      #searchBtn {
+        padding: 0 16px; /* Smaller padding */
+        font-size: 0.875rem;
+      }
+      #filterSection select {
+        font-size: 0.75rem; /* Smaller font in filters */
+        padding: 4px; /* Smaller padding */
+      }
+      .score-container {
+        width: 40px; /* Smaller score ring on mobile */
+        height: 40px;
+      }
+      .score-container svg {
+        width: 40px;
+        height: 40px;
+      }
+      .score-container circle {
+        cx: 20;
+        cy: 20;
+        r: 16;
+        stroke-width: 4;
+      }
+      .score-text {
+        font-size: 10px; /* Smaller score text */
+      }
     }
   </style>
 </head>
@@ -142,11 +233,13 @@
   <div id="offlineMessage">Offline Mode: Using cached data. Some features may be limited.</div>
   <div class="w-full max-w-6xl">
     <div class="flex justify-between items-center mb-8">
-      <div class="logo-container">
-        <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt="TMDB Logo" />
-      </div>
-      <div class = "logo-container2">
+      <div class="flex items-center gap-4">
+        <div class="logo-container">
+          <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt="TMDB Logo" />
+        </div>
+        <div class="logo-container2">
           <img src="https://fmfau.github.io/Images/Logo%20Tran.png" alt="Custom Logo" />
+        </div>
       </div>
       <div class="flex items-center gap-4">
         <button id="themeToggle" class="p-2 rounded-full bg-gray-700 dark:bg-gray-700 light:bg-gray-300 text-white dark:text-white light:text-gray-900 hover:bg-gray-600 dark:hover:bg-gray-600 light:hover:bg-gray-400 transition">
