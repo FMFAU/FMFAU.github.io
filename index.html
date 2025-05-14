@@ -76,6 +76,31 @@
       50% { opacity: 0.5; }
       100% { opacity: 1; }
     }
+    #episodeList {
+      max-height: 300px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+    .dark #episodeList::-webkit-scrollbar {
+      width: 8px;
+    }
+    .dark #episodeList::-webkit-scrollbar-track {
+      background: #1f2937;
+    }
+    .dark #episodeList::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 4px;
+    }
+    .light #episodeList::-webkit-scrollbar {
+      width: 8px;
+    }
+    .light #episodeList::-webkit-scrollbar-track {
+      background: #e5e7eb;
+    }
+    .light #episodeList::-webkit-scrollbar-thumb {
+      background: #9ca3af;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center px-4 py-6">
@@ -106,6 +131,9 @@
           <button id="favouriteBtn" class="p-2 rounded-full bg-gray-700 dark:bg-gray-700 light:bg-gray-200 hover:bg-gray-600 dark:hover:bg-gray-600 light:hover:bg-gray-300 transition">
             <svg id="favouriteIcon" class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
           </button>
+          <button id="shareBtn" class="p-2 rounded-full bg-blue-600 hover:bg-blue-700 transition">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+          </button>
           <button id="streamBtn" class="p-2 rounded-full bg-green-600 hover:bg-green-700 transition">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.2A1 1 0 0010 9.768v4.464a1 1 0 001.555.832l3.197-2.2a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
           </button>
@@ -128,6 +156,29 @@
       </div>
       <h3 class="text-lg font-semibold text-white dark:text-white light:text-gray-900 mb-2">Cast</h3>
       <div id="modalCast" class="grid grid-cols-2 gap-4 mb-4"></div>
+      <div id="episodeSection" class="hidden">
+        <h3 class="text-lg font-semibold text-white dark:text-white light:text-gray-900 mb-2">Episodes</h3>
+        <div class="flex mb-4">
+          <select id="seasonSelect" class="w-full p-2 rounded-md bg-gray-900 dark:bg-gray-900 light:bg-white text-white dark:text-white light:text-gray-900"></select>
+        </div>
+        <div id="episodeList" class="grid gap-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="shareModal" class="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-60 light:bg-opacity-40 hidden flex items-center justify-center z-50">
+    <div class="bg-gray-800 dark:bg-gray-800 light:bg-white rounded-xl p-6 w-full max-w-md shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-white dark:text-white light:text-gray-900">Share</h2>
+        <button id="closeShareModal" class="p-2 rounded-full bg-gray-700 dark:bg-gray-700 light:bg-gray-200 hover:bg-gray-600 dark:hover:bg-gray-600 light:hover:bg-gray-300 transition">
+          <svg class="w-6 h-6 text-white dark:text-white light:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <div class="flex flex-col gap-4">
+        <button id="shareTwitter" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Share on Twitter</button>
+        <button id="shareFacebook" class="px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition">Share on Facebook</button>
+        <button id="copyLink" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition">Copy Link</button>
+      </div>
     </div>
   </div>
 
@@ -181,9 +232,18 @@
     const modalScoreCircle = document.getElementById('modalScoreCircle');
     const modalRelease = document.getElementById('modalRelease');
     const modalCast = document.getElementById('modalCast');
+    const episodeSection = document.getElementById('episodeSection');
+    const seasonSelect = document.getElementById('seasonSelect');
+    const episodeList = document.getElementById('episodeList');
     const closeModal = document.getElementById('closeModal');
     const favouriteBtn = document.getElementById('favouriteBtn');
     const favouriteIcon = document.getElementById('favouriteIcon');
+    const shareBtn = document.getElementById('shareBtn');
+    const shareModal = document.getElementById('shareModal');
+    const closeShareModal = document.getElementById('closeShareModal');
+    const shareTwitter = document.getElementById('shareTwitter');
+    const shareFacebook = document.getElementById('shareFacebook');
+    const copyLink = document.getElementById('copyLink');
     const streamBtn = document.getElementById('streamBtn');
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
@@ -201,6 +261,9 @@
     const recentlyWatchedList = document.getElementById('recentlyWatchedList');
 
     let currentItem = null;
+    let selectedSeason = 1;
+    let selectedEpisode = 1;
+    let seasonsData = [];
 
     // Theme handling
     const savedTheme = Cookies.get('theme') || 'dark';
@@ -224,7 +287,7 @@
     // Skeleton loader for trending
     function displaySkeletonLoader() {
       resultsDiv.innerHTML = '';
-      for (let i = 0; i < 12; i++) { // Show 12 skeleton cards
+      for (let i = 0; i < 12; i++) {
         const card = document.createElement('div');
         card.className = 'relative bg-gray-900 dark:bg-gray-900 light:bg-white rounded-lg overflow-hidden shadow-lg';
         card.innerHTML = `
@@ -248,12 +311,12 @@
       displaySkeletonLoader();
       try {
         const allResults = [];
-        for (let page = 1; page <= 3; page++) { // Fetch 3 pages (~60 items, filter to 50)
+        for (let page = 1; page <= 3; page++) {
           const response = await fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=${apiKey}&page=${page}`);
           const data = await response.json();
           allResults.push(...data.results);
         }
-        displayResults(allResults.slice(0, 50)); // Display top 50
+        displayResults(allResults.slice(0, 50));
       } catch (error) {
         resultsDiv.innerHTML = '<p class="text-center text-red-500 col-span-full">Error fetching trending content. Please try again.</p>';
       }
@@ -293,11 +356,15 @@
           const scorePercent = score !== 'N/A' ? score * 10 : 0;
           const strokeColor = score !== 'N/A' ? getScoreColor(score) : '#4b5563';
           const poster = item.poster_path ? `https://image.tmdb.org/t/p/w300${item.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Image';
+          const badge = item.media_type === 'tv' ? 
+            '<span class="absolute top-2 left-2 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded">Series</span>' : 
+            '<span class="absolute top-2 left-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded">Movie</span>';
 
           const card = document.createElement('div');
           card.className = 'relative bg-gray-900 dark:bg-gray-900 light:bg-white rounded-lg overflow-hidden shadow-lg group cursor-pointer transform hover:scale-105 transition-transform duration-200';
           card.innerHTML = `
             <div class="relative">
+              ${badge}
               <img src="${poster}" alt="${title}" class="w-full h-[450px] object-cover group-hover:opacity-80 transition duration-200" />
               <div class="absolute bottom-2 right-2 w-14 h-14">
                 <svg class="score-ring w-full h-full">
@@ -323,7 +390,7 @@
     async function openModal(item) {
       currentItem = item;
       modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden'; // Prevent main page scrolling
+      document.body.style.overflow = 'hidden';
       modalTitle.textContent = item.title || item.name;
       modalPoster.src = item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image';
       modalDescription.textContent = item.overview || 'No description available.';
@@ -354,6 +421,72 @@
       } catch (error) {
         modalCast.innerHTML = '<p class="text-red-500">Error loading cast.</p>';
       }
+
+      // Handle episode selection for series
+      if (item.media_type === 'tv') {
+        episodeSection.classList.remove('hidden');
+        seasonSelect.innerHTML = '<option>Loading seasons...</option>';
+        episodeList.innerHTML = '<p class="text-gray-400 dark:text-gray-400 light:text-gray-600">Loading episodes...</p>';
+        try {
+          const response = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${apiKey}`);
+          const data = await response.json();
+          seasonsData = data.seasons.filter(season => season.season_number > 0); // Exclude specials
+          displaySeasons(seasonsData);
+          await fetchEpisodes(item.id, selectedSeason);
+        } catch (error) {
+          episodeSection.innerHTML = '<p class="text-red-500">Error loading seasons.</p>';
+        }
+      } else {
+        episodeSection.classList.add('hidden');
+      }
+    }
+
+    function displaySeasons(seasons) {
+      seasonSelect.innerHTML = '';
+      seasons.forEach(season => {
+        const option = document.createElement('option');
+        option.value = season.season_number;
+        option.textContent = `Season ${season.season_number}`;
+        seasonSelect.appendChild(option);
+      });
+      seasonSelect.value = selectedSeason;
+      seasonSelect.addEventListener('change', () => {
+        selectedSeason = parseInt(seasonSelect.value);
+        fetchEpisodes(currentItem.id, selectedSeason);
+      });
+    }
+
+    async function fetchEpisodes(seriesId, seasonNumber) {
+      try {
+        const response = await fetch(`https://api.themoviedb.org/3/tv/${seriesId}/season/${seasonNumber}?api_key=${apiKey}`);
+        const data = await response.json();
+        displayEpisodes(data.episodes);
+      } catch (error) {
+        episodeList.innerHTML = '<p class="text-red-500">Error loading episodes.</p>';
+      }
+    }
+
+    function displayEpisodes(episodes) {
+      episodeList.innerHTML = '';
+      if (episodes.length === 0) {
+        episodeList.innerHTML = '<p class="text-gray-400 dark:text-gray-400 light:text-gray-600">No episodes available.</p>';
+        return;
+      }
+      episodes.forEach(episode => {
+        const episodeCard = document.createElement('div');
+        episodeCard.className = 'p-4 bg-gray-900 dark:bg-gray-900 light:bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-800 dark:hover:bg-gray-800 light:hover:bg-gray-200 transition';
+        episodeCard.innerHTML = `
+          <h4 class="text-sm font-semibold text-white dark:text-white light:text-gray-900">Episode ${episode.episode_number}: ${episode.name || 'Untitled'}</h4>
+          <p class="text-xs text-gray-400 dark:text-gray-400 light:text-gray-600">Aired: ${episode.air_date || 'N/A'}</p>
+          <p class="text-xs text-gray-300 dark:text-gray-300 light:text-gray-700 truncate">${episode.overview || 'No description available.'}</p>
+        `;
+        episodeCard.addEventListener('click', () => {
+          selectedEpisode = episode.episode_number;
+          episodeList.querySelectorAll('div').forEach(card => card.classList.remove('ring-2', 'ring-blue-500'));
+          episodeCard.classList.add('ring-2', 'ring-blue-500');
+        });
+        episodeList.appendChild(episodeCard);
+      });
     }
 
     function displayCast(cast) {
@@ -404,9 +537,50 @@
       const theme = Cookies.get('theme') || 'dark';
       let streamUrl = `${streamBaseUrl}?video_id=${currentItem.id}&tmdb=1&theme=${theme}`;
       if (currentItem.media_type === 'tv') {
-        streamUrl += '&s=1&e=1';
+        streamUrl += `&s=${selectedSeason}&e=${selectedEpisode}`;
       }
       window.open(streamUrl, '_blank');
+    });
+
+    shareBtn.addEventListener('click', () => {
+      shareModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    });
+
+    closeShareModal.addEventListener('click', () => {
+      shareModal.classList.add('hidden');
+      document.body.style.overflow = currentItem ? 'hidden' : '';
+    });
+
+    shareTwitter.addEventListener('click', () => {
+      const text = currentItem.media_type === 'tv' ? 
+        `Watching ${currentItem.name} S${selectedSeason}E${selectedEpisode} on Movie Search!` : 
+        `Check out ${currentItem.title || currentItem.name} on Movie Search!`;
+      const url = window.location.href;
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+      shareModal.classList.add('hidden');
+      document.body.style.overflow = currentItem ? 'hidden' : '';
+    });
+
+    shareFacebook.addEventListener('click', () => {
+      const text = currentItem.media_type === 'tv' ? 
+        `Watching ${currentItem.name} S${selectedSeason}E${selectedEpisode} on Movie Search!` : 
+        `Check out ${currentItem.title || currentItem.name} on Movie Search!`;
+      const url = window.location.href;
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`, '_blank');
+      shareModal.classList.add('hidden');
+      document.body.style.overflow = currentItem ? 'hidden' : '';
+    });
+
+    copyLink.addEventListener('click', () => {
+      const text = currentItem.media_type === 'tv' ? 
+        `Watching ${currentItem.name} S${selectedSeason}E${selectedEpisode} on Movie Search! ${window.location.href}` : 
+        `Check out ${currentItem.title || currentItem.name} on Movie Search! ${window.location.href}`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Link copied to clipboard!');
+        shareModal.classList.add('hidden');
+        document.body.style.overflow = currentItem ? 'hidden' : '';
+      });
     });
 
     function getScoreColor(score) {
