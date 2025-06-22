@@ -1,10 +1,9 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FMFAU - Modern Streaming</title>
-    <link rel="icon" href="FMFAUNewTrans.png" type="image/png">
+    <link rel="icon" href="https://fmfau.github.io/Assets/FMFAUNewTrans.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
@@ -337,24 +336,24 @@
             <h2 class="text-2xl font-semibold mb-2">🔗 Supported Embed Providers</h2>
             <pre class="bg-gray-900 p-4 rounded overflow-x-auto font-mono text-sm text-green-400 max-h-96">
         pstream:
-        movie: https:
-        tv:    https:
+        movie: https://iframe.pstream.org/embed/tmdb-movie-{TMDB_ID}
+        tv:    https://iframe.pstream.org/embed/tmdb-tv-{TMDB_ID}/{season}/{episode}
 
         multiembed:
-        movie: https:
-        tv:    https:
+        movie: https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1
+        tv:    https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1&s={season}&e={episode}
 
         vidsrc:
-        movie: https:
-        tv:    https:
+        movie: https://vidsrc.to/embed/movie/{TMDB_ID}
+        tv:    https://vidsrc.to/embed/tv/{TMDB_ID}/{season}/{episode}
 
         embedsu:
-        movie: https:
-        tv:    https:
+        movie: https://embed.su/embed/movie/{TMDB_ID}
+        tv:    https://embed.su/embed/tv/{TMDB_ID}/{season}/{episode}
 
         autoembed:
-        movie: https:
-        tv:    https:
+        movie: https://player.autoembed.cc/embed/movie/{TMDB_ID}
+        tv:    https://player.autoembed.cc/embed/tv/{TMDB_ID}/{season}/{episode}
             </pre>
             </div>
         </div>
@@ -364,6 +363,7 @@
             <div class="max-w-7xl mx-auto px-4 py-12">
                 <h1 class="text-4xl font-bold mb-8">Search Results</h1>
                 <div id="searchResults" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+
                 </div>
             </div>
         </div>
@@ -372,6 +372,7 @@
     <div id="mediaModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
         <div class="glass-strong rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div id="modalContent" class="p-6">
+
             </div>
         </div>
     </div>
@@ -434,6 +435,7 @@
                 </svg>
             </button>
             <div id="streamContent" class="w-full h-full">
+
             </div>
         </div>
     </div>
@@ -454,34 +456,34 @@
         const streamProviders = {
         pstream: {
             name: "PStream",
-            movie: (tmdbId) => `https:
+            movie: (tmdbId) => `https://iframe.pstream.org/embed/tmdb-movie-${tmdbId}`,
             tv: (tmdbId, season, episode) =>
-            `https:
+            `https://iframe.pstream.org/embed/tmdb-tv-${tmdbId}/${season}/${episode}`,
         },
         vidsrc: {
             name: "VidSrc",
-            movie: (tmdbId) => `https:
+            movie: (tmdbId) => `https://vidsrc.net/embed/tmdb/movie/${tmdbId}`,
             tv: (tmdbId, season, episode) =>
-            `https:
+            `https://vidsrc.net/embed/tmdb/tv/${tmdbId}/${season}/${episode}`,
         },
         multiembed: {
 
             name: "MultiEmbed",
-            movie: (tmdbId) => `https:
+            movie: (tmdbId) => `https://multiembed.mov/directstream.php?video_id=${tmdbId}&tmdb=1`,
             tv: (tmdbId, season, episode) =>
-            `https:
+            `https://multiembed.mov/directstream.php?video_id=${tmdbId}&tmdb=1&s=${season}&e=${episode}`,
         },
         embedsu: {
             name: "EmbedSu",
-            movie: (tmdbId) => `https:
+            movie: (tmdbId) => `https://embed.su/embed/movie/${tmdbId}`,
             tv: (tmdbId, season, episode) =>
-            `https:
+            `https://embed.su/embed/tv/${tmdbId}/${season}/${episode}`,
         },
         autoembed: {
             name: "AutoEmbed",
-            movie: (tmdbId) => `https:
+            movie: (tmdbId) => `https://player.autoembed.cc/embed/movie/${tmdbId}`,
             tv: (tmdbId, season, episode) =>
-            `https:
+            `https://player.autoembed.cc/embed/tv/${tmdbId}/${season}/${episode}`,
         },
     };
 
@@ -875,7 +877,6 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                 element.classList.add('text-gray-500');
                 element.querySelector('svg').setAttribute('fill', 'none');
             } else {
-
                 fetchFromTMDB(type === 'movie' ? `/movie/${id}` : `/tv/${id}`).then(media => {
                     if (media) {
                         favorites.push({...media, media_type: type});
@@ -1119,7 +1120,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                 if (e.target.closest('.trailer-btn')) {
                     const btn = e.target.closest('.trailer-btn');
                     const key = btn.dataset.key;
-                    window.open(`https:
+                    window.open(`https://www.youtube.com/watch?v=${key}`, '_blank');
                 }
 
                 if (e.target.closest('.episodes-btn')) {
