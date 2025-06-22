@@ -210,14 +210,16 @@
     <nav class="nav-glass fixed top-0 left-0 right-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-8">
-                    <h1 class="text-2xl font-bold" style="color: var(--accent)">FMFAU</h1>
-                    <div class="hidden md:flex space-x-2">
-                        <button class="nav-btn active" data-page="home">Home</button>
-                        <button class="nav-btn" data-page="movies">Movies</button>
-                        <button class="nav-btn" data-page="tv">TV Shows</button>
-                        <button class="nav-btn" data-page="favorites">Favorites</button>
-                    </div>
+                <div class="flex items-center space-x-4">
+                <img src="Assets/FMFAUNewTrans.png" alt="FMFAU Logo" class="h-8 w-8 object-contain" />
+                <h1 class="text-2xl font-bold" style="color: var(--accent)">FMFAU</h1>
+                <div class="hidden md:flex space-x-2">
+                    <button class="nav-btn active" data-page="home">Home</button>
+                    <button class="nav-btn" data-page="movies">Movies</button>
+                    <button class="nav-btn" data-page="tv">TV Shows</button>
+                    <button class="nav-btn" data-page="favorites">Favorites</button>
+                    <button class="nav-btn" data-page="endpoint">About</button>
+                </div>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="relative">
@@ -317,6 +319,67 @@
             </div>
         </div>
 
+        <div id="endpointPage" class="page hidden">
+        <div class="max-w-5xl mx-auto px-6 py-12 text-white">
+            <h1 class="text-4xl font-bold mb-6">🎬 FMFAU Embed Info & Credits</h1>
+
+            <!-- Discord Contact -->
+            <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-2">👤 Contact</h2>
+            <p class="bg-gray-800 rounded p-3 font-mono text-green-400 select-all cursor-pointer" 
+                onclick="navigator.clipboard.writeText('discord.gg/YOUR_LINK_HERE')"
+                title="Click to copy Discord invite!">
+                discord.gg/YOUR_LINK_HERE
+            </p>
+            <p class="text-gray-400 mt-1 text-sm">
+                Reach out for support, updates, or feedback!
+            </p>
+            </div>
+
+            <!-- Credits -->
+            <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-2">⚡ Credits</h2>
+            <ul class="list-disc list-inside text-gray-300 space-y-1">
+                <li>Powered by TMDB API for reliable movie and TV metadata</li>
+                <li>Embedding powered by trusted free streaming providers</li>
+                <li>Developed and maintained by the DIZZY / FMFAU</li>
+            </ul>
+            </div>
+
+            <!-- Supported Embed Providers -->
+            <div>
+            <h2 class="text-2xl font-semibold mb-2">🔗 Supported Embed Providers</h2>
+            <pre class="bg-gray-900 p-4 rounded overflow-x-auto font-mono text-sm text-green-400 max-h-96">
+        pstream:
+        movie: https://iframe.pstream.org/embed/tmdb-movie-{TMDB_ID}
+        tv:    https://iframe.pstream.org/embed/tmdb-tv-{TMDB_ID}/{season}/{episode}
+
+        multiembed:
+        movie: https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1
+        tv:    https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1&s={season}&e={episode}
+
+        vidsrc:
+        movie: https://vidsrc.to/embed/movie/{TMDB_ID}
+        tv:    https://vidsrc.to/embed/tv/{TMDB_ID}/{season}/{episode}
+
+        embedsu:
+        movie: https://embed.su/embed/movie/{TMDB_ID}
+        tv:    https://embed.su/embed/tv/{TMDB_ID}/{season}/{episode}
+
+        autoembed:
+        movie: https://player.autoembed.cc/embed/movie/{TMDB_ID}
+        tv:    https://player.autoembed.cc/embed/tv/{TMDB_ID}/{season}/{episode}
+            </pre>
+            </div>
+        </div>
+        </div>
+
+
+
+
+
+
+
         <!-- Search Results -->
         <div id="searchPage" class="page hidden">
             <div class="max-w-7xl mx-auto px-4 py-12">
@@ -363,9 +426,10 @@
                         <span class="text-lg">Default Stream Provider</span>
                         <select id="streamProvider" class="glass rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="pstream">PStream</option>
-    			    <option value="multiembed">MultiEmbed</option>
-    			    <option value="vidsrc">VidSrc</option>
-    			    <option value="embedsu">EmbedSu</option>
+                            <option value="vidsrc">VidSrc</option>
+                            <option value="multiembed">MultiEmbed</option>
+                            <option value="embedsu">EmbedSu</option>
+			    <option value="autoembed">AutoEmbed</option>
                         </select>
                     </div>
 
@@ -417,28 +481,39 @@
 
         // Stream providers configuration
         const streamProviders = {
-        	pstream: {
-       	    		name: "PStream",
-            		movie: (id) => `https://iframe.pstream.org/embed/tmdb-movie-${id}`,
-            		tv: (id, season, episode) => `https://iframe.pstream.org/embed/tmdb-tv-${id}/${season}/${episode}`
-        	},
-        	multiembed: {
-            		name: "MultiEmbed",
-            		movie: (id) => `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1`,
-            		tv: (id, season, episode) => `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1&s=${season}&e=${episode}`
-        	},
-        	vidsrc: {
-            		name: "VidSrc",
-            		movie: (id) => `https://vidsrc.to/embed/movie/${id}`,
-            		tv: (id, season, episode) => `https://vidsrc.to/embed/tv/${id}/${season}/${episode}`
-        	},
-        	embedsu: {
-            		name: "EmbedSu",
-            		movie: (id) => `https://embed.su/embed/movie/${id}`,
-            		tv: (id, season, episode) => `https://embed.su/embed/tv/${id}/${season}/${episode}`
-        	},
+        pstream: {
+            name: "PStream",
+            movie: (tmdbId) => `https://iframe.pstream.org/embed/tmdb-movie-${tmdbId}`,
+            tv: (tmdbId, season, episode) =>
+            `https://iframe.pstream.org/embed/tmdb-tv-${tmdbId}/${season}/${episode}`,
+        },
+        vidsrc: {
+            name: "VidSrc",
+            movie: (tmdbId) => `https://vidsrc.net/embed/tmdb/movie/${tmdbId}`,
+            tv: (tmdbId, season, episode) =>
+            `https://vidsrc.net/embed/tmdb/tv/${tmdbId}/${season}/${episode}`,
+        },
+        multiembed: {
+            // Lowkey stolen from the original DarkStreamz
+            name: "MultiEmbed",
+            movie: (tmdbId) => `https://multiembed.mov/directstream.php?video_id=${tmdbId}&tmdb=1`,
+            tv: (tmdbId, season, episode) =>
+            `https://multiembed.mov/directstream.php?video_id=${tmdbId}&tmdb=1&s=${season}&e=${episode}`,
+        },
+        embedsu: {
+            name: "EmbedSu",
+            movie: (tmdbId) => `https://embed.su/embed/movie/${tmdbId}`,
+            tv: (tmdbId, season, episode) =>
+            `https://embed.su/embed/tv/${tmdbId}/${season}/${episode}`,
+        },
+        autoembed: {
+            name: "AutoEmbed",
+            movie: (tmdbId) => `https://player.autoembed.cc/embed/movie/${tmdbId}`,
+            tv: (tmdbId, season, episode) =>
+            `https://player.autoembed.cc/embed/tv/${tmdbId}/${season}/${episode}`,
+        },
+    };
 
-        };
 
         // Theme management
         function initTheme() {
@@ -609,6 +684,8 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             }
         }
 
+
+
         // Media modal
         async function showMediaModal(id, type) {
             const modal = document.getElementById('mediaModal');
@@ -772,34 +849,13 @@ function createProviderDropdown(id, type, season = null, episode = null) {
 
         // Stream functions
         function openStream(id, type, season = null, episode = null) {
-    const streamModal = document.getElementById('streamModal');
-    const streamContent = document.getElementById('streamContent');
+        const streamModal = document.getElementById('streamModal');
+        const streamContent = document.getElementById('streamContent');
 
-    const providers = {
-        pstream: {
-            name: "PStream",
-            movie: (id) => `https://iframe.pstream.org/embed/tmdb-movie-${id}`,
-            tv: (id, season, episode) => `https://iframe.pstream.org/embed/tmdb-tv-${id}/${season}/${episode}`
-        },
-        multiembed: {
-            name: "MultiEmbed",
-            movie: (id) => `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1`,
-            tv: (id, season, episode) => `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1&s=${season}&e=${episode}`
-        },
-        vidsrc: {
-            name: "VidSrc",
-            movie: (id) => `https://vidsrc.to/embed/movie/${id}`,
-            tv: (id, season, episode) => `https://vidsrc.to/embed/tv/${id}/${season}/${episode}`
-        },
-        embedsu: {
-            name: "EmbedSu",
-            movie: (id) => `https://embed.su/embed/movie/${id}`,
-            tv: (id, season, episode) => `https://embed.su/embed/tv/${id}/${season}/${episode}`
-        },
-    };
 
-    const provider = providers[settings.streamProvider] || providers.pstream;
-    const fallbackProvider = providers[settings.streamProvider === 'pstream' ? 'multiembed' : 'pstream'];
+
+    const provider = streamProviders[settings.streamProvider] || streamProviders.pstream;
+    const fallbackProvider = streamProviders[settings.streamProvider === 'pstream' ? 'multiembed' : 'pstream'];
 
     // Construct stream URL
     const streamURL = type === 'movie'
@@ -830,7 +886,33 @@ function createProviderDropdown(id, type, season = null, episode = null) {
     streamModal.classList.remove('hidden');
 }
 
+        function generateURLs() {
+            const id = document.getElementById("tmdbIdInput").value.trim();
+            const season = document.getElementById("seasonInput").value || 1;
+            const episode = document.getElementById("episodeInput").value || 1;
+            const type = document.getElementById("typeSelect").value;
 
+            if (!id) {
+                document.getElementById("outputBlock").textContent = "// Please enter a TMDB ID.";
+                return;
+            }
+
+            let result = "";
+
+            for (const key in providers) {
+                const p = providers[key];
+                try {
+                    const url = type === "movie"
+                        ? p.movie(id)
+                        : p.tv(id, season, episode);
+                    result += `${p.name}: ${url}\n`;
+                } catch (e) {
+                    result += `${p.name}: ⚠️ Error generating URL\n`;
+                }
+            }
+
+            document.getElementById("outputBlock").textContent = result.trim();
+        }
 
         // Favorites management
         function toggleFavorite(id, type, element) {
@@ -944,23 +1026,29 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             const config = {
                 "pstream.org": {
                     "base": "https://pstream.org",
-                    "movie": "https://pstream.org/media/{MediaID}",
-                    "series": "https://pstream.org/media/{MediaID}{SeasonID}/{EpisodeID}"
+                    "movie": "https://pstream.org/media/{TMDB_ID}",
+                    "series": "https://pstream.org/media/{TMDB_ID}{S}/{E}"
                 },
                 "multiembed": {
                     "movie": "https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1",
                     "series": "https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1&s={S}&e={E}"
                 },
-		"vidsrc": {
-                     "movie": "https://vidsrc.net/embed/tt${id}",
-                     "series": "https://vidsrc.net/embed/tt${id}/${S}/${E}"
-            	},
-            	"embedsu": {
-                     "movie": "https://embed.su/embed/movie/${id}",
-                     "series": "https://embed.su/embed/tv/${id}/${S}/${E}"
-		}
+                "vidsrc": {
+                    "movie": "https://vidsrc.net/embed/tt{TMDB_ID}",
+                    "series": "https://vidsrc.net/embed/tt{TMDB_ID}/{S}/{E}"
+                },
+                "embedsu": {
+                    "movie": "https://embed.su/embed/movie/{TMDB_ID}",
+                    "series": "https://embed.su/embed/tv/{TMDB_ID}/{S}/{E}"
+                },
+        	autoembed: {
+            	    name: "AutoEmbed",
+            	    "movie": "https://player.autoembed.cc/embed/movie/{TMDB_ID}",
+            	    "series": "https://player.autoembed.cc/embed/tv/${TMDB_ID}/{S}/{E}"
+        	},
             };
-            
+
+
             const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1139,7 +1227,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             }
             
             window.addEventListener('hashchange', handleHashChange);
-            handleHashChange(); // Check on load
+            handleHashChange();
         });
     </script>
 </body>
