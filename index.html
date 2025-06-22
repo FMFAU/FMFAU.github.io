@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +7,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
-        
+
         * {
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        
+
         :root {
             --bg-primary: rgba(255, 255, 255, 0.95);
             --bg-secondary: rgba(255, 255, 255, 0.85);
@@ -23,7 +22,7 @@
             --border: rgba(0, 0, 0, 0.15);
             --shadow: rgba(0, 0, 0, 0.1);
         }
-        
+
         [data-theme="dark"] {
             --bg-primary: rgba(15, 23, 42, 0.95);
             --bg-secondary: rgba(15, 23, 42, 0.85);
@@ -34,17 +33,17 @@
             --border: rgba(255, 255, 255, 0.1);
             --shadow: rgba(0, 0, 0, 0.3);
         }
-        
+
         body {
             background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
             color: var(--text-primary);
             min-height: 100vh;
         }
-        
+
         [data-theme="dark"] body {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
         }
-        
+
         .glass {
             background: var(--bg-card);
             backdrop-filter: blur(20px);
@@ -52,7 +51,7 @@
             border: 1px solid var(--border);
             box-shadow: 0 8px 32px var(--shadow);
         }
-        
+
         .glass-strong {
             background: var(--bg-secondary);
             backdrop-filter: blur(40px);
@@ -60,7 +59,7 @@
             border: 1px solid var(--border);
             box-shadow: 0 20px 64px var(--shadow);
         }
-        
+
         .nav-glass {
             background: var(--bg-primary);
             backdrop-filter: blur(30px);
@@ -68,72 +67,71 @@
             border-bottom: 1px solid var(--border);
             box-shadow: 0 4px 20px var(--shadow);
         }
-        
+
         .card-hover {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .card-hover:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 25px 50px var(--shadow);
         }
-        
+
         .hero-gradient {
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
         }
-        
+
         .carousel {
             scroll-behavior: smooth;
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
-        
+
         .carousel::-webkit-scrollbar {
             display: none;
         }
-        
+
         .btn-primary {
             background: var(--accent);
             color: white;
             transition: all 0.2s ease;
             box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
         }
-        
+
         .btn-primary:hover {
             opacity: 0.9;
             transform: scale(1.05);
             box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
         }
-        
+
         .modal {
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
-        
+
         .loading {
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-        
+
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        /* Custom dropdown styles */
+
         .dropdown {
             position: relative;
             display: inline-block;
         }
-        
+
         .dropdown-content {
             display: none;
             position: absolute;
@@ -149,11 +147,11 @@
             left: 0;
             margin-top: 4px;
         }
-        
+
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        
+
         .dropdown-content a {
             color: var(--text-primary);
             padding: 12px 16px;
@@ -163,42 +161,39 @@
             margin: 4px;
             transition: all 0.2s ease;
         }
-        
+
         .dropdown-content a:hover {
             background: var(--accent);
             color: white;
         }
-        
-        /* Better trending cards */
+
         .trending-card {
             min-width: 200px;
             flex-shrink: 0;
         }
-        
-        /* Input improvements */
+
         input, select {
             background: var(--bg-card);
             border: 1px solid var(--border);
             color: var(--text-primary);
         }
-        
+
         input::placeholder {
             color: var(--text-secondary);
         }
-        
-        /* Button improvements */
+
         .nav-btn {
             color: var(--text-secondary);
             padding: 8px 16px;
             border-radius: 8px;
             transition: all 0.2s ease;
         }
-        
+
         .nav-btn:hover {
             background: var(--bg-card);
             color: var(--text-primary);
         }
-        
+
         .nav-btn.active {
             background: var(--accent);
             color: white;
@@ -206,7 +201,7 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+
     <nav class="nav-glass fixed top-0 left-0 right-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -245,11 +240,10 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="pt-16">
-        <!-- Home Page -->
+
         <div id="homePage" class="page active">
-            <!-- Hero Section -->
+
             <section id="heroSection" class="relative h-96 overflow-hidden">
                 <div id="heroContent" class="absolute inset-0 flex items-center justify-center">
                     <div class="loading glass rounded-lg p-8">
@@ -258,63 +252,57 @@
                 </div>
             </section>
 
-            <!-- Trending Section -->
             <section class="py-12">
                 <div class="max-w-7xl mx-auto px-4">
                     <h2 class="text-3xl font-bold mb-8">What's Trending</h2>
                     <div id="trendingCarousel" class="carousel flex space-x-6 overflow-x-auto pb-4">
-                        <!-- Trending items will be loaded here -->
+
                     </div>
                 </div>
             </section>
 
-            <!-- Popular Movies -->
             <section class="py-12">
                 <div class="max-w-7xl mx-auto px-4">
                     <h2 class="text-3xl font-bold mb-8">Popular Movies</h2>
                     <div id="popularMovies" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                        <!-- Movies will be loaded here -->
+
                     </div>
                 </div>
             </section>
 
-            <!-- Popular TV Shows -->
             <section class="py-12">
                 <div class="max-w-7xl mx-auto px-4">
                     <h2 class="text-3xl font-bold mb-8">Popular TV Shows</h2>
                     <div id="popularTVShows" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                        <!-- TV Shows will be loaded here -->
+
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- Movies Page -->
         <div id="moviesPage" class="page hidden">
             <div class="max-w-7xl mx-auto px-4 py-12">
                 <h1 class="text-4xl font-bold mb-8">Movies</h1>
                 <div id="moviesGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    <!-- Movies will be loaded here -->
+
                 </div>
             </div>
         </div>
 
-        <!-- TV Shows Page -->
         <div id="tvPage" class="page hidden">
             <div class="max-w-7xl mx-auto px-4 py-12">
                 <h1 class="text-4xl font-bold mb-8">TV Shows</h1>
                 <div id="tvGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    <!-- TV Shows will be loaded here -->
+
                 </div>
             </div>
         </div>
 
-        <!-- Favorites Page -->
         <div id="favoritesPage" class="page hidden">
             <div class="max-w-7xl mx-auto px-4 py-12">
                 <h1 class="text-4xl font-bold mb-8">Your Favorites</h1>
                 <div id="favoritesGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    <!-- Favorites will be loaded here -->
+
                 </div>
             </div>
         </div>
@@ -323,20 +311,18 @@
         <div class="max-w-5xl mx-auto px-6 py-12 text-white">
             <h1 class="text-4xl font-bold mb-6">🎬 FMFAU Embed Info & Credits</h1>
 
-            <!-- Discord Contact -->
             <div class="mb-6">
             <h2 class="text-2xl font-semibold mb-2">👤 Contact</h2>
             <p class="bg-gray-800 rounded p-3 font-mono text-green-400 select-all cursor-pointer" 
-                onclick="navigator.clipboard.writeText('discord.gg/YOUR_LINK_HERE')"
+                onclick="navigator.clipboard.writeText('discord.gg/cjhD23qHtn')"
                 title="Click to copy Discord invite!">
-                discord.gg/YOUR_LINK_HERE
+                discord.gg/cjhD23qHtn
             </p>
             <p class="text-gray-400 mt-1 text-sm">
                 Reach out for support, updates, or feedback!
             </p>
             </div>
 
-            <!-- Credits -->
             <div class="mb-6">
             <h2 class="text-2xl font-semibold mb-2">⚡ Credits</h2>
             <ul class="list-disc list-inside text-gray-300 space-y-1">
@@ -346,61 +332,49 @@
             </ul>
             </div>
 
-            <!-- Supported Embed Providers -->
             <div>
             <h2 class="text-2xl font-semibold mb-2">🔗 Supported Embed Providers</h2>
             <pre class="bg-gray-900 p-4 rounded overflow-x-auto font-mono text-sm text-green-400 max-h-96">
         pstream:
-        movie: https://iframe.pstream.org/embed/tmdb-movie-{TMDB_ID}
-        tv:    https://iframe.pstream.org/embed/tmdb-tv-{TMDB_ID}/{season}/{episode}
+        movie: https:
+        tv:    https:
 
         multiembed:
-        movie: https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1
-        tv:    https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1&s={season}&e={episode}
+        movie: https:
+        tv:    https:
 
         vidsrc:
-        movie: https://vidsrc.to/embed/movie/{TMDB_ID}
-        tv:    https://vidsrc.to/embed/tv/{TMDB_ID}/{season}/{episode}
+        movie: https:
+        tv:    https:
 
         embedsu:
-        movie: https://embed.su/embed/movie/{TMDB_ID}
-        tv:    https://embed.su/embed/tv/{TMDB_ID}/{season}/{episode}
+        movie: https:
+        tv:    https:
 
         autoembed:
-        movie: https://player.autoembed.cc/embed/movie/{TMDB_ID}
-        tv:    https://player.autoembed.cc/embed/tv/{TMDB_ID}/{season}/{episode}
+        movie: https:
+        tv:    https:
             </pre>
             </div>
         </div>
         </div>
 
-
-
-
-
-
-
-        <!-- Search Results -->
         <div id="searchPage" class="page hidden">
             <div class="max-w-7xl mx-auto px-4 py-12">
                 <h1 class="text-4xl font-bold mb-8">Search Results</h1>
                 <div id="searchResults" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    <!-- Search results will be loaded here -->
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Media Modal -->
     <div id="mediaModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
         <div class="glass-strong rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div id="modalContent" class="p-6">
-                <!-- Modal content will be loaded here -->
             </div>
         </div>
     </div>
 
-    <!-- Settings Modal -->
     <div id="settingsModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
         <div class="glass-strong rounded-2xl max-w-lg w-full">
             <div class="p-6">
@@ -412,7 +386,7 @@
                         </svg>
                     </button>
                 </div>
-                
+
                 <div class="space-y-6">
                     <div class="flex justify-between items-center">
                         <span class="text-lg">Dark Mode</span>
@@ -451,7 +425,6 @@
         </div>
     </div>
 
-    <!-- Stream Modal -->
     <div id="streamModal" class="modal fixed inset-0 bg-black bg-opacity-90 hidden z-50 flex items-center justify-center">
         <div class="relative w-full h-full max-w-6xl max-h-[90vh] bg-black rounded-lg overflow-hidden">
             <button id="closeStream" class="absolute top-4 right-4 z-10 text-white hover:text-gray-300 bg-black bg-opacity-50 rounded-full p-2">
@@ -460,62 +433,57 @@
                 </svg>
             </button>
             <div id="streamContent" class="w-full h-full">
-                <!-- Stream iframe will be loaded here -->
             </div>
         </div>
     </div>
 
     <script>
-        // Configuration
+
         const apiKey = '9adc0bbf543673c5fb45ab24a36599e1';
         const baseURL = 'https://api.themoviedb.org/3';
         const imageBaseURL = 'https://image.tmdb.org/t/p/w500';
         const backdropBaseURL = 'https://image.tmdb.org/t/p/w1280';
 
-        // State management
         let currentPage = 'home';
         let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
         let recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched') || '[]');
         let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
         let settings = JSON.parse(localStorage.getItem('settings') || '{"theme": "auto", "streamProvider": "pstream", "autoplay": true}');
 
-        // Stream providers configuration
         const streamProviders = {
         pstream: {
             name: "PStream",
-            movie: (tmdbId) => `https://iframe.pstream.org/embed/tmdb-movie-${tmdbId}`,
+            movie: (tmdbId) => `https:
             tv: (tmdbId, season, episode) =>
-            `https://iframe.pstream.org/embed/tmdb-tv-${tmdbId}/${season}/${episode}`,
+            `https:
         },
         vidsrc: {
             name: "VidSrc",
-            movie: (tmdbId) => `https://vidsrc.net/embed/tmdb/movie/${tmdbId}`,
+            movie: (tmdbId) => `https:
             tv: (tmdbId, season, episode) =>
-            `https://vidsrc.net/embed/tmdb/tv/${tmdbId}/${season}/${episode}`,
+            `https:
         },
         multiembed: {
-            // Lowkey stolen from the original DarkStreamz
+
             name: "MultiEmbed",
-            movie: (tmdbId) => `https://multiembed.mov/directstream.php?video_id=${tmdbId}&tmdb=1`,
+            movie: (tmdbId) => `https:
             tv: (tmdbId, season, episode) =>
-            `https://multiembed.mov/directstream.php?video_id=${tmdbId}&tmdb=1&s=${season}&e=${episode}`,
+            `https:
         },
         embedsu: {
             name: "EmbedSu",
-            movie: (tmdbId) => `https://embed.su/embed/movie/${tmdbId}`,
+            movie: (tmdbId) => `https:
             tv: (tmdbId, season, episode) =>
-            `https://embed.su/embed/tv/${tmdbId}/${season}/${episode}`,
+            `https:
         },
         autoembed: {
             name: "AutoEmbed",
-            movie: (tmdbId) => `https://player.autoembed.cc/embed/movie/${tmdbId}`,
+            movie: (tmdbId) => `https:
             tv: (tmdbId, season, episode) =>
-            `https://player.autoembed.cc/embed/tv/${tmdbId}/${season}/${episode}`,
+            `https:
         },
     };
 
-
-        // Theme management
         function initTheme() {
             const theme = settings.theme;
             if (theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -525,7 +493,6 @@
             }
         }
 
-        // API functions
         async function fetchFromTMDB(endpoint) {
             try {
                 const response = await fetch(`${baseURL}${endpoint}?api_key=${apiKey}`);
@@ -546,13 +513,12 @@
             }
         }
 
-        // Media card creation
         function createMediaCard(item, isForTrending = false) {
             const isMovie = item.media_type === 'movie' || !item.first_air_date;
             const title = item.title || item.name;
             const date = item.release_date || item.first_air_date;
             const poster = item.poster_path ? `${imageBaseURL}${item.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Image';
-            
+
             const isFavorite = favorites.some(fav => fav.id === item.id && fav.media_type === (isMovie ? 'movie' : 'tv'));
 
             const cardClasses = isForTrending ? 'trending-card glass rounded-2xl overflow-hidden card-hover cursor-pointer fade-in' : 'glass rounded-2xl overflow-hidden card-hover cursor-pointer fade-in';
@@ -604,7 +570,6 @@ function createProviderDropdown(id, type, season = null, episode = null) {
     `;
 }
 
-        // Hero section
         async function loadHeroSection() {
             const trending = await fetchFromTMDB('/trending/all/day');
             if (trending && trending.results.length > 0) {
@@ -634,7 +599,6 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             }
         }
 
-        // Load content functions
         async function loadTrending() {
             const trending = await fetchFromTMDB('/trending/all/day');
             if (trending) {
@@ -684,20 +648,17 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             }
         }
 
-
-
-        // Media modal
         async function showMediaModal(id, type) {
             const modal = document.getElementById('mediaModal');
             const content = document.getElementById('modalContent');
-            
+
             modal.classList.remove('hidden');
             content.innerHTML = '<div class="flex justify-center py-12"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>';
 
             const endpoint = type === 'movie' ? `/movie/${id}` : `/tv/${id}`;
             const media = await fetchFromTMDB(endpoint);
             const videos = await fetchFromTMDB(`${endpoint}/videos`);
-            
+
             if (media) {
                 const title = media.title || media.name;
                 const overview = media.overview;
@@ -705,7 +666,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                 const genres = media.genres ? media.genres.map(g => g.name).join(', ') : '';
                 const rating = media.vote_average ? Math.round(media.vote_average * 10) / 10 : 'N/A';
                 const trailer = videos && videos.results ? videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube') : null;
-                
+
                 const isFavorite = favorites.some(fav => fav.id === media.id && fav.media_type === type);
 
                 content.innerHTML = `
@@ -715,7 +676,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                         </button>
-                        
+
                         ${backdrop ? `
                             <div class="relative h-64 rounded-lg overflow-hidden mb-6">
                                 <img src="${backdrop}" alt="${title}" class="w-full h-full object-cover">
@@ -734,7 +695,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                                 </div>
                             </div>
                         ` : ''}
-                        
+
                         <div class="space-y-6">
                             <div class="flex flex-wrap gap-4">
                                 <button class="btn-primary px-6 py-3 rounded-full font-semibold flex items-center space-x-2 stream-btn" 
@@ -744,21 +705,21 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                                     </svg>
                                     <span>Watch Now</span>
                                 </button>
-                                
+
                                 ${trailer ? `
                                     <button class="glass px-6 py-3 rounded-full font-semibold hover:bg-white hover:bg-opacity-20 trailer-btn" 
                                             data-key="${trailer.key}">
                                         <span>Watch Trailer</span>
                                     </button>
                                 ` : ''}
-                                
+
                                 <button class="favorite-btn ${isFavorite ? 'text-red-500' : 'text-gray-500'} glass px-6 py-3 rounded-full font-semibold hover:bg-white hover:bg-opacity-20" 
                                         data-id="${media.id}" data-type="${type}">
                                     <svg class="h-5 w-5" fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.682l-1.318-1.364a4.5 4.5 0 00-6.364 0z"></path>
                                     </svg>
                                 </button>
-                                
+
                                 <button class="share-btn glass px-6 py-3 rounded-full font-semibold hover:bg-white hover:bg-opacity-20" 
                                         data-id="${media.id}" data-type="${type}" data-title="${title}">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -766,38 +727,36 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                                     </svg>
                                 </button>
                             </div>
-                            
+
                             <div>
                                 <h3 class="text-xl font-semibold mb-2">Overview</h3>
                                 <p class="text-gray-600 dark:text-gray-300 leading-relaxed">${overview || 'No overview available.'}</p>
                             </div>
-                            
+
                             ${type === 'tv' ? `
                                 <div id="seasonsContainer">
                                     <h3 class="text-xl font-semibold mb-4">Seasons</h3>
                                     <div id="seasonsList" class="space-y-2">
-                                        <!-- Seasons will be loaded here -->
+
                                     </div>
                                 </div>
                             ` : ''}
                         </div>
                     </div>
                 `;
-                
-                // Load seasons for TV shows
+
                 if (type === 'tv' && media.seasons) {
                     loadSeasons(media.id, media.seasons);
                 }
             }
         }
 
-        // Load seasons for TV shows
         async function loadSeasons(showId, seasons) {
             const seasonsList = document.getElementById('seasonsList');
             if (!seasonsList) return;
-            
+
             const seasonsHTML = seasons.map(season => {
-                if (season.season_number === 0) return ''; // Skip specials
+                if (season.season_number === 0) return ''; 
                 return `
                     <div class="glass rounded-lg p-4 season-item" data-season="${season.season_number}">
                         <div class="flex justify-between items-center">
@@ -813,11 +772,10 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                     </div>
                 `;
             }).join('');
-            
+
             seasonsList.innerHTML = seasonsHTML;
         }
 
-        // Load episodes
         async function loadEpisodes(showId, seasonNumber) {
             const episodes = await fetchFromTMDB(`/tv/${showId}/season/${seasonNumber}`);
             if (episodes && episodes.episodes) {
@@ -836,7 +794,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                         </div>
                     </div>
                 `).join('');
-                
+
                 const seasonsList = document.getElementById('seasonsList');
                 seasonsList.innerHTML = `
                     <button class="text-blue-600 hover:text-blue-800 mb-4 back-to-seasons">← Back to Seasons</button>
@@ -847,32 +805,25 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             }
         }
 
-        // Stream functions
         function openStream(id, type, season = null, episode = null) {
         const streamModal = document.getElementById('streamModal');
         const streamContent = document.getElementById('streamContent');
 
-
-
     const provider = streamProviders[settings.streamProvider] || streamProviders.pstream;
     const fallbackProvider = streamProviders[settings.streamProvider === 'pstream' ? 'multiembed' : 'pstream'];
 
-    // Construct stream URL
     const streamURL = type === 'movie'
         ? provider.movie(id)
         : provider.tv(id, season, episode);
 
-    // Fallback URL
     const fallbackURL = type === 'movie'
         ? fallbackProvider.movie(id)
         : fallbackProvider.tv(id, season, episode);
 
-    // Save to recently watched
     const item = { id, type, season, episode, timestamp: Date.now() };
     recentlyWatched = [item, ...recentlyWatched.filter(r => !(r.id === id && r.type === type))].slice(0, 20);
     localStorage.setItem('recentlyWatched', JSON.stringify(recentlyWatched));
 
-    // Inject iframe with fallback on error
     streamContent.innerHTML = `
         <iframe 
             src="${streamURL}"
@@ -914,17 +865,16 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             document.getElementById("outputBlock").textContent = result.trim();
         }
 
-        // Favorites management
         function toggleFavorite(id, type, element) {
             const index = favorites.findIndex(fav => fav.id === id && fav.media_type === type);
-            
+
             if (index > -1) {
                 favorites.splice(index, 1);
                 element.classList.remove('text-red-500');
                 element.classList.add('text-gray-500');
                 element.querySelector('svg').setAttribute('fill', 'none');
             } else {
-                // We need to get the media details to add to favorites
+
                 fetchFromTMDB(type === 'movie' ? `/movie/${id}` : `/tv/${id}`).then(media => {
                     if (media) {
                         favorites.push({...media, media_type: type});
@@ -935,18 +885,16 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                     }
                 });
             }
-            
+
             localStorage.setItem('favorites', JSON.stringify(favorites));
         }
 
-        // Search functionality
         async function performSearch(query) {
             if (!query.trim()) return;
-            
-            // Add to recent searches
+
             recentSearches = [query, ...recentSearches.filter(s => s !== query)].slice(0, 10);
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
-            
+
             const results = await searchTMDB(query);
             if (results) {
                 showPage('search');
@@ -962,34 +910,30 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             }
         }
 
-        // Page navigation
         function showPage(pageName) {
-            // Hide all pages
+
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.add('hidden');
                 page.classList.remove('active');
             });
-            
-            // Show selected page
+
             const targetPage = document.getElementById(pageName + 'Page');
             if (targetPage) {
                 targetPage.classList.remove('hidden');
                 targetPage.classList.add('active');
             }
-            
-            // Update navigation
+
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active', 'text-blue-600', 'font-semibold');
             });
-            
+
             const activeBtn = document.querySelector(`[data-page="${pageName}"]`);
             if (activeBtn) {
                 activeBtn.classList.add('active', 'text-blue-600', 'font-semibold');
             }
-            
+
             currentPage = pageName;
-            
-            // Load page content
+
             switch (pageName) {
                 case 'movies':
                     loadMoviesPage();
@@ -1003,7 +947,6 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             }
         }
 
-        // Settings management
         function loadSettings() {
             document.getElementById('darkModeToggle').checked = 
                 settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -1021,7 +964,6 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             initTheme();
         }
 
-        // Export configuration
         function exportStreamConfig() {
             const config = {
                 "pstream.org": {
@@ -1048,7 +990,6 @@ function createProviderDropdown(id, type, season = null, episode = null) {
         	},
             };
 
-
             const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1058,10 +999,9 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             URL.revokeObjectURL(url);
         }
 
-        // Share functionality
         function shareMedia(id, type, title) {
             const url = `${window.location.origin}${window.location.pathname}#${type}/${id}`;
-            
+
             if (navigator.share) {
                 navigator.share({
                     title: `${title} - FMFAU`,
@@ -1075,26 +1015,22 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             }
         }
 
-        // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize
+
             initTheme();
             loadSettings();
-            
-            // Load initial content
+
             loadHeroSection();
             loadTrending();
             loadPopularMovies();
             loadPopularTVShows();
-            
-            // Navigation
+
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     showPage(e.target.dataset.page);
                 });
             });
-            
-            // Theme toggle
+
             document.getElementById('themeToggle').addEventListener('click', () => {
                 const currentTheme = document.documentElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -1103,32 +1039,27 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                 localStorage.setItem('settings', JSON.stringify(settings));
                 document.getElementById('darkModeToggle').checked = newTheme === 'dark';
             });
-            
-            // Search
+
             document.getElementById('searchInput').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     performSearch(e.target.value);
                 }
             });
-            
-            // Settings modal
+
             document.getElementById('settingsBtn').addEventListener('click', () => {
                 document.getElementById('settingsModal').classList.remove('hidden');
             });
-            
+
             document.getElementById('closeSettings').addEventListener('click', () => {
                 document.getElementById('settingsModal').classList.add('hidden');
             });
-            
-            // Settings controls
+
             document.getElementById('darkModeToggle').addEventListener('change', saveSettings);
             document.getElementById('streamProvider').addEventListener('change', saveSettings);
             document.getElementById('autoplayToggle').addEventListener('change', saveSettings);
-            
-            // Export config
+
             document.getElementById('exportConfig').addEventListener('click', exportStreamConfig);
-            
-            // Media modal close
+
             document.addEventListener('click', (e) => {
                 if (e.target.id === 'closeModal' || e.target.closest('#closeModal')) {
                     document.getElementById('mediaModal').classList.add('hidden');
@@ -1137,24 +1068,21 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                     document.getElementById('mediaModal').classList.add('hidden');
                 }
             });
-            
-            // Stream modal close
+
             document.getElementById('closeStream').addEventListener('click', () => {
                 document.getElementById('streamModal').classList.add('hidden');
                 document.getElementById('streamContent').innerHTML = '';
             });
-            
-            // Dynamic event delegation
+
             document.addEventListener('click', async (e) => {
-                // Media card clicks
+
                 if (e.target.closest('.glass[data-id]') && !e.target.closest('button')) {
                     const card = e.target.closest('.glass[data-id]');
                     const id = card.dataset.id;
                     const type = card.dataset.type;
                     showMediaModal(id, type);
                 }
-                
-                // Stream buttons
+
                 if (e.target.closest('.stream-btn')) {
                     const btn = e.target.closest('.stream-btn');
                     const id = btn.dataset.id;
@@ -1163,16 +1091,14 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                     const episode = btn.dataset.episode;
                     openStream(id, type, season, episode);
                 }
-                
-                // Info buttons
+
                 if (e.target.closest('.info-btn')) {
                     const btn = e.target.closest('.info-btn');
                     const id = btn.dataset.id;
                     const type = btn.dataset.type;
                     showMediaModal(id, type);
                 }
-                
-                // Favorite buttons
+
                 if (e.target.closest('.favorite-btn')) {
                     e.stopPropagation();
                     const btn = e.target.closest('.favorite-btn');
@@ -1180,8 +1106,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                     const type = btn.dataset.type;
                     toggleFavorite(id, type, btn);
                 }
-                
-                // Share buttons
+
                 if (e.target.closest('.share-btn')) {
                     const btn = e.target.closest('.share-btn');
                     const id = btn.dataset.id;
@@ -1189,33 +1114,29 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                     const title = btn.dataset.title;
                     shareMedia(id, type, title);
                 }
-                
-                // Trailer buttons
+
                 if (e.target.closest('.trailer-btn')) {
                     const btn = e.target.closest('.trailer-btn');
                     const key = btn.dataset.key;
-                    window.open(`https://www.youtube.com/watch?v=${key}`, '_blank');
+                    window.open(`https:
                 }
-                
-                // Episodes buttons
+
                 if (e.target.closest('.episodes-btn')) {
                     const btn = e.target.closest('.episodes-btn');
                     const showId = btn.dataset.showId;
                     const season = btn.dataset.season;
                     loadEpisodes(showId, season);
                 }
-                
-                // Back to seasons
+
                 if (e.target.closest('.back-to-seasons')) {
                     const seasonsContainer = document.getElementById('seasonsContainer');
                     if (seasonsContainer) {
-                        // Reload the original seasons view
-                        location.reload(); // Simple solution - in production, you'd store the original state
+
+                        location.reload(); 
                     }
                 }
             });
-            
-            // Handle URL hash for deep linking
+
             function handleHashChange() {
                 const hash = window.location.hash.slice(1);
                 if (hash) {
@@ -1225,7 +1146,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                     }
                 }
             }
-            
+
             window.addEventListener('hashchange', handleHashChange);
             handleHashChange();
         });
