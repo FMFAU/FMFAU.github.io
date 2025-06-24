@@ -354,6 +354,11 @@
         autoembed:
         movie: https://player.autoembed.cc/embed/movie/{TMDB_ID}
         tv:    https://player.autoembed.cc/embed/tv/{TMDB_ID}/{season}/{episode}
+
+        moviesapi:
+        movie: https://moviesapi.club/movie/{TMDB_ID}
+        tv:    https://moviesapi.club/tv/{TMDB_ID}-{season}-{episode}
+
             </pre>
             </div>
         </div>
@@ -405,18 +410,10 @@
                             <option value="vidsrc">VidSrc</option>
                             <option value="multiembed">MultiEmbed</option>
                             <option value="embedsu">EmbedSu</option>
-			    <option value="autoembed">AutoEmbed</option>
+			                <option value="autoembed">AutoEmbed</option>
+			                <option value="moviesapi">MoviesApi</option>
                         </select>
                     </div>
-
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg">Autoplay Trailers</span>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="autoplayToggle" class="sr-only peer" checked>
-                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        </label>
-                    </div>
-
                     <div class="pt-4 border-t" style="border-color: var(--border)">
                         <button id="exportConfig" class="btn-primary w-full py-3 rounded-lg font-semibold">
                             Export Stream Config
@@ -451,7 +448,7 @@
         let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
         let recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched') || '[]');
         let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-        let settings = JSON.parse(localStorage.getItem('settings') || '{"theme": "auto", "streamProvider": "pstream", "autoplay": true}');
+        let settings = JSON.parse(localStorage.getItem('settings') || '{"theme": "auto", "streamProvider": "pstream"}');
 
         const streamProviders = {
         pstream: {
@@ -484,6 +481,12 @@
             movie: (tmdbId) => `https://player.autoembed.cc/embed/movie/${tmdbId}`,
             tv: (tmdbId, season, episode) =>
             `https://player.autoembed.cc/embed/tv/${tmdbId}/${season}/${episode}`,
+        },
+        moviesapi: {
+            name: "MoviesApi",
+            movie: (tmdbId) => `https://moviesapi.club/movie/${tmdbId}`,
+            tv: (tmdbId, season, episode) =>
+            `https://moviesapi.club/tv/${tmdbId}/${season}-${episode}`,
         },
     };
 
@@ -953,14 +956,12 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             document.getElementById('darkModeToggle').checked = 
                 settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
             document.getElementById('streamProvider').value = settings.streamProvider;
-            document.getElementById('autoplayToggle').checked = settings.autoplay;
         }
 
         function saveSettings() {
             settings = {
                 theme: document.getElementById('darkModeToggle').checked ? 'dark' : 'light',
                 streamProvider: document.getElementById('streamProvider').value,
-                autoplay: document.getElementById('autoplayToggle').checked
             };
             localStorage.setItem('settings', JSON.stringify(settings));
             initTheme();
@@ -985,11 +986,16 @@ function createProviderDropdown(id, type, season = null, episode = null) {
                     "movie": "https://embed.su/embed/movie/{TMDB_ID}",
                     "series": "https://embed.su/embed/tv/{TMDB_ID}/{S}/{E}"
                 },
-        	autoembed: {
+        	    autoembed: {
             	    name: "AutoEmbed",
             	    "movie": "https://player.autoembed.cc/embed/movie/{TMDB_ID}",
             	    "series": "https://player.autoembed.cc/embed/tv/${TMDB_ID}/{S}/{E}"
-        	},
+        	    },
+                moviesapi: {
+            	    name: "MoviesApi",
+            	    "movie": "https://moviesapi.club/movie/{TMDB_ID}",
+            	    "series": "https://moviesapi.club/tv/${TMDB_ID}/{S}/{E}"
+        	    },
             };
 
             const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
@@ -1058,7 +1064,6 @@ function createProviderDropdown(id, type, season = null, episode = null) {
 
             document.getElementById('darkModeToggle').addEventListener('change', saveSettings);
             document.getElementById('streamProvider').addEventListener('change', saveSettings);
-            document.getElementById('autoplayToggle').addEventListener('change', saveSettings);
 
             document.getElementById('exportConfig').addEventListener('click', exportStreamConfig);
 
