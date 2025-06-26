@@ -218,12 +218,12 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <input type="text" id="searchInput" placeholder="Search..." 
-                               class="glass rounded-full px-4 py-2 pl-10 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <svg class="absolute left-3 top-2.5 h-5 w-5" style="color: var(--text-secondary)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
+			<input type="text" id="searchInput" placeholder="Search..." 
+				class="glass rounded-full px-4 py-2 pl-10 w-[450px] focus:outline-none focus:ring-2 focus:ring-blue-500">
+			<svg class="absolute left-3 top-2.5 h-5 w-5" style="color: var(--text-secondary)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+			</svg>
+		    </div>
                     <button id="themeToggle" class="glass p-2 rounded-full hover:bg-opacity-80 transition-all">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
@@ -253,13 +253,13 @@
             </section>
 
             <section class="py-12">
-                <div class="max-w-7xl mx-auto px-4">
-                    <h2 class="text-3xl font-bold mb-8">What's Trending</h2>
-                    <div id="trendingCarousel" class="carousel flex space-x-6 overflow-x-auto pb-4">
-
-                    </div>
-                </div>
-            </section>
+		<div class="max-w-7xl mx-auto px-4 relative">
+			<h2 class="text-3xl font-bold mb-8">What's Trending</h2>
+			<button id="scrollLeft" class="absolute left-0 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full z-10 hidden md:flex items-center justify-center hover:bg-opacity-60 transition">&#8592;</button>
+			<div id="trendingCarousel" class="carousel flex space-x-6 overflow-x-auto pb-4 scroll-smooth scrollbar-hide px-2"></div>
+			<button id="scrollRight" class="absolute right-0 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full z-10 hidden md:flex items-center justify-center hover:bg-opacity-60 transition">&#8594;</button>
+		</div>
+	    </section>
 
             <section class="py-12">
                 <div class="max-w-7xl mx-auto px-4">
@@ -560,15 +560,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
 
     return `
         <div class="dropdown relative">
-            <button class="btn-primary px-6 py-3 rounded-full font-semibold flex items-center space-x-2">
-                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                </svg>
-                <span>Watch Now</span>
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-            </button>
+           
             <div class="dropdown-content absolute z-[9999]">
                 ${dropdownItems}
             </div>
@@ -609,6 +601,18 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             const trending = await fetchFromTMDB('/trending/all/day');
             if (trending) {
                 const carousel = document.getElementById('trendingCarousel');
+		const leftBtn = document.getElementById('scrollLeft');
+		const rightBtn = document.getElementById('scrollRight');
+		const scrollAmount = 700; // Pixel Ammount
+
+		leftBtn.addEventListener('click', () => {
+			carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+		});
+
+		rightBtn.addEventListener('click', () => {
+			carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+		});
+
                 carousel.innerHTML = trending.results.map(createMediaCard).join('');
             }
         }
@@ -633,7 +637,7 @@ function createProviderDropdown(id, type, season = null, episode = null) {
             const movies = await fetchFromTMDB('/movie/popular');
             if (movies) {
                 const grid = document.getElementById('moviesGrid');
-                grid.innerHTML = movies.results.map(item => createMediaCard({...item, media_type: 'movie'})).join('');
+                grid.innerHTML = movies.results.slice(0, 100).map(item => createMediaCard({...item, media_type: 'movie'})).join('');
             }
         }
 
