@@ -1,1165 +1,329 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FMFAU - Modern Streaming</title>
-    <link rel="icon" href="https://fmfau.github.io/Assets/FMFAUNewTrans.png" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>FMFAU Redirect</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
         * {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         :root {
-            --bg-primary: rgba(255, 255, 255, 0.95);
-            --bg-secondary: rgba(255, 255, 255, 0.85);
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --text-primary: #1d1d1f;
-            --text-secondary: #6e6e73;
-            --accent: #007aff;
-            --border: rgba(0, 0, 0, 0.15);
-            --shadow: rgba(0, 0, 0, 0.1);
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: rgba(15, 23, 42, 0.95);
-            --bg-secondary: rgba(15, 23, 42, 0.85);
-            --bg-card: rgba(30, 41, 59, 0.8);
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent: #3b82f6;
-            --border: rgba(255, 255, 255, 0.1);
-            --shadow: rgba(0, 0, 0, 0.3);
+            --bg-primary: rgba(25, 25, 35, 0.18);
+            --bg-secondary: rgba(35, 35, 45, 0.22);
+            --bg-card: rgba(45, 45, 55, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: #c4b5fd;
+            --accent: #a78bfa;
+            --accent-hover: #c4b5fd;
+            --shadow: rgba(0, 0, 0, 0.5);
+            --glow: rgba(167, 139, 250, 0.5);
+            --glow-strong: rgba(167, 139, 250, 0.8);
+            --transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         body {
-            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            background: linear-gradient(145deg, #111827 0%, #1e293b 100%);
             color: var(--text-primary);
             min-height: 100vh;
+            transition: var(--transition);
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        [data-theme="dark"] body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        body.redirecting {
+            animation: pageFade 1.5s ease-in-out forwards;
         }
 
-        .glass {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            box-shadow: 0 8px 32px var(--shadow);
+        @keyframes pageFade {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.03); }
+            100% { opacity: 0; transform: scale(0.97); }
         }
 
-        .glass-strong {
-            background: var(--bg-secondary);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid var(--border);
-            box-shadow: 0 20px 64px var(--shadow);
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAFElEQVQIW2NkYGD4z8DAwMDAwMDBwAABZgB5twAAAABJRU5ErkJggg==');
+            opacity: 0.02;
+            z-index: -1;
         }
 
         .nav-glass {
             background: var(--bg-primary);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 4px 20px var(--shadow);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 6px 28px var(--shadow), inset 0 0 8px rgba(255, 255, 255, 0.08);
+            border-radius: 0 0 14px 14px;
+            padding: clamp(8px, 0.8vw, 10px) clamp(12px, 1.6vw, 16px);
+            height: clamp(48px, 6vw, 64px);
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            animation: navBounce 1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        @keyframes navBounce {
+            0% { opacity: 0; transform: translateY(-30px) scale(0.95); }
+            60% { opacity: 1; transform: translateY(5px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .card-hover:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px var(--shadow);
+        @media (max-width: 768px) {
+            .nav-glass {
+                height: clamp(40px, 5vw, 48px);
+                padding: clamp(6px, 0.6vw, 8px) clamp(8px, 1vw, 12px);
+            }
         }
 
-        .hero-gradient {
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
+        @media (max-width: 480px) {
+            .nav-glass {
+                height: clamp(32px, 4vw, 40px);
+                padding: clamp(4px, 0.5vw, 6px) clamp(6px, 0.8vw, 10px);
+            }
         }
 
-        .carousel {
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+        .logo, .fmfau-text {
+            color: #ffffff;
+            transition: var(--transition);
+            animation: logoGlow 2.2s ease-in-out infinite;
         }
 
-        .carousel::-webkit-scrollbar {
-            display: none;
+        .logo img {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 0 8px var(--shadow));
         }
 
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        .logo:hover, .fmfau-text:hover {
+            filter: drop-shadow(0 0 16px var(--glow-strong));
+            color: var(--accent);
+            transform: scale(1.08) rotate(2deg);
         }
 
-        .btn-primary:hover {
-            opacity: 0.9;
-            transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+        .fmfau-text {
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+            font-size: clamp(14px, 1.6vw, 16px);
+            margin-left: 8px;
         }
 
-        .modal {
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px var(--shadow)); }
+            50% { filter: drop-shadow(0 0 16px var(--glow-strong)); }
         }
 
-        .loading {
-            animation: pulse 2s infinite;
+        .glass {
+            background: var(--bg-card);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: none;
+            box-shadow: 0 12px 48px var(--shadow), inset 0 0 10px rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 32px;
+            max-width: 640px;
+            width: 90%;
+            text-align: center;
+            animation: contentPop 1.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        @keyframes contentPop {
+            0% { opacity: 0; transform: translateY(60px) scale(0.85) rotateX(-10deg); }
+            60% { opacity: 1; transform: translateY(-10px) scale(1.05); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
+        h1 {
+            font-size: clamp(28px, 3.2vw, 36px);
+            font-weight: 900;
+            margin-bottom: 20px;
+            animation: textPulse 2.5s ease-in-out infinite;
         }
 
-        @keyframes fadeIn {
+        @keyframes textPulse {
+            0%, 100% { text-shadow: 0 0 10px var(--glow); }
+            50% { text-shadow: 0 0 20px var(--glow-strong); }
+        }
+
+        p {
+            font-size: clamp(16px, 1.8vw, 18px);
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            line-height: 1.7;
+            animation: textFade 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes textFade {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .dropdown {
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            background: var(--bg-card);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px var(--shadow), inset 0 0 8px rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: var(--transition);
             position: relative;
-            display: inline-block;
         }
 
-        .dropdown-content {
-            display: none;
+        input[type="checkbox"]:checked {
+            background: var(--accent);
+            box-shadow: 0 6px 20px var(--glow-strong);
+            animation: checkboxBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        input[type="checkbox"]:checked::after {
+            content: '✔';
             position: absolute;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            min-width: 160px;
-            box-shadow: 0 8px 32px var(--shadow);
-            border: 1px solid var(--border);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-size: 18px;
+        }
+
+        input[type="checkbox"]:hover {
+            box-shadow: 0 6px 20px var(--glow);
+            transform: scale(1.15);
+        }
+
+        @keyframes checkboxBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        label {
+            font-size: clamp(16px, 1.8vw, 18px);
+            color: var(--text-primary);
+            cursor: pointer;
+            animation: textFade 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #ffffff;
+            transition: var(--transition);
+            box-shadow: 0 14px 48px var(--glow);
             border-radius: 12px;
-            z-index: 1000;
-            top: 100%;
-            left: 0;
-            margin-top: 4px;
+            padding: 14px 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            animation: buttonRipple 2s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
         }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            animation: none;
         }
 
-        .dropdown-content a {
-            color: var(--text-primary);
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            border-radius: 8px;
-            margin: 4px;
-            transition: all 0.2s ease;
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent-hover);
+            transform: translateY(-8px) scale(1.12);
+            box-shadow: 0 20px 72px var(--glow-strong);
         }
 
-        .dropdown-content a:hover {
-            background: var(--accent);
-            color: white;
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -200%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transition: transform 0.8s ease;
         }
 
-        .trending-card {
-            min-width: 200px;
-            flex-shrink: 0;
+        .btn-primary:hover:not(:disabled)::after {
+            transform: translateX(200%);
         }
 
-        input, select {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-        }
-
-        input::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .nav-btn {
-            color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn:hover {
-            background: var(--bg-card);
-            color: var(--text-primary);
-        }
-
-        .nav-btn.active {
-            background: var(--accent);
-            color: white;
+        @keyframes buttonRipple {
+            0%, 100% { transform: scale(1); box-shadow: 0 14px 48px var(--glow); }
+            50% { transform: scale(1.06); box-shadow: 0 14px 48px var(--glow-strong); }
         }
     </style>
 </head>
-<body>
-
-    <nav class="nav-glass fixed top-0 left-0 right-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-4">
-                <img src="Assets/FMFAUNewTrans.png" alt="FMFAU Logo" class="h-8 w-8 object-contain" />
-                <h1 class="text-2xl font-bold" style="color: var(--accent)">FMFAU</h1>
-                <div class="hidden md:flex space-x-2">
-                    <button class="nav-btn active" data-page="home">Home</button>
-                    <button class="nav-btn" data-page="movies">Movies</button>
-                    <button class="nav-btn" data-page="tv">TV Shows</button>
-                    <button class="nav-btn" data-page="favorites">Favorites</button>
-                    <button class="nav-btn" data-page="endpoint">About</button>
-                </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="relative">
-			<input type="text" id="searchInput" placeholder="Search..." 
-				class="glass rounded-full px-4 py-2 pl-10 w-[450px] focus:outline-none focus:ring-2 focus:ring-blue-500">
-			<svg class="absolute left-3 top-2.5 h-5 w-5" style="color: var(--text-secondary)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-			</svg>
-		    </div>
-                    <button id="themeToggle" class="glass p-2 rounded-full hover:bg-opacity-80 transition-all">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                        </svg>
-                    </button>
-                    <button id="settingsBtn" class="glass p-2 rounded-full hover:bg-opacity-80 transition-all">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+<body data-theme="dark">
+    <div class="nav-glass">
+        <div class="logo">
+            <img src="https://fmfau.org/Assets/FMFAUNewTrans.png" alt="FMFAU Logo">
         </div>
-    </nav>
+        <span class="fmfau-text">FMFAU</span>
+    </div>
+    <div class="glass">
+        <h1>New Domain Hype!</h1>
+        <p>
+            Alright, new site! FMFAU.ORG!
 
-    <main class="pt-16">
-
-        <div id="homePage" class="page active">
-
-            <section id="heroSection" class="relative h-96 overflow-hidden">
-                <div id="heroContent" class="absolute inset-0 flex items-center justify-center">
-                    <div class="loading glass rounded-lg p-8">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2" style="border-color: var(--accent)"></div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="py-12">
-		<div class="max-w-7xl mx-auto px-4 relative">
-			<h2 class="text-3xl font-bold mb-8">What's Trending</h2>
-			<button id="scrollLeft" class="absolute left-0 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full z-10 hidden md:flex items-center justify-center hover:bg-opacity-60 transition">&#8592;</button>
-			<div id="trendingCarousel" class="carousel flex space-x-6 overflow-x-auto pb-4 scroll-smooth scrollbar-hide px-2"></div>
-			<button id="scrollRight" class="absolute right-0 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full z-10 hidden md:flex items-center justify-center hover:bg-opacity-60 transition">&#8594;</button>
-		</div>
-	    </section>
-
-            <section class="py-12">
-                <div class="max-w-7xl mx-auto px-4">
-                    <h2 class="text-3xl font-bold mb-8">Popular Movies</h2>
-                    <div id="popularMovies" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-
-                    </div>
-                </div>
-            </section>
-
-            <section class="py-12">
-                <div class="max-w-7xl mx-auto px-4">
-                    <h2 class="text-3xl font-bold mb-8">Popular TV Shows</h2>
-                    <div id="popularTVShows" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <div id="moviesPage" class="page hidden">
-            <div class="max-w-7xl mx-auto px-4 py-12">
-                <h1 class="text-4xl font-bold mb-8">Movies</h1>
-                <div id="moviesGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-
-                </div>
-            </div>
-        </div>
-
-        <div id="tvPage" class="page hidden">
-            <div class="max-w-7xl mx-auto px-4 py-12">
-                <h1 class="text-4xl font-bold mb-8">TV Shows</h1>
-                <div id="tvGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-
-                </div>
-            </div>
-        </div>
-
-        <div id="favoritesPage" class="page hidden">
-            <div class="max-w-7xl mx-auto px-4 py-12">
-                <h1 class="text-4xl font-bold mb-8">Your Favorites</h1>
-                <div id="favoritesGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-
-                </div>
-            </div>
-        </div>
-
-        <div id="endpointPage" class="page hidden">
-        <div class="max-w-5xl mx-auto px-6 py-12 text-white">
-            <h1 class="text-4xl font-bold mb-6">🎬 FMFAU Embed Info & Credits</h1>
-
-            <div class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">👤 Contact</h2>
-            <p class="bg-gray-800 rounded p-3 font-mono text-green-400 select-all cursor-pointer" 
-                onclick="navigator.clipboard.writeText('discord.gg/cjhD23qHtn')"
-                title="Click to copy Discord invite!">
-                discord.gg/cjhD23qHtn
+            # Why?
+            Well Open-Sourcing a PRIVATE TMDB Api key is kinda stupid but we need TMDB so I have resulted to going Private.
             </p>
-            <p class="text-gray-400 mt-1 text-sm">
-                Reach out for support, updates, or feedback!
-            </p>
-            </div>
-
-            <div class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">⚡ Credits</h2>
-            <ul class="list-disc list-inside text-gray-300 space-y-1">
-                <li>Powered by TMDB API for reliable movie and TV metadata</li>
-                <li>Embedding powered by trusted free streaming providers</li>
-                <li>Developed and maintained by the DIZZY / FMFAU</li>
-            </ul>
-            </div>
-
-            <div>
-            <h2 class="text-2xl font-semibold mb-2">🔗 Supported Embed Providers</h2>
-            <pre class="bg-gray-900 p-4 rounded overflow-x-auto font-mono text-sm text-green-400 max-h-96">
-        pstream:
-        movie: https://iframe.pstream.org/embed/tmdb-movie-{TMDB_ID}
-        tv:    https://iframe.pstream.org/embed/tmdb-tv-{TMDB_ID}/{season}/{episode}
-
-        multiembed:
-        movie: https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1
-        tv:    https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1&s={season}&e={episode}
-
-        vidsrc:
-        movie: https://vidsrc.to/embed/movie/{TMDB_ID}
-        tv:    https://vidsrc.to/embed/tv/{TMDB_ID}/{season}/{episode}
-
-        embedsu:
-        movie: https://embed.su/embed/movie/{TMDB_ID}
-        tv:    https://embed.su/embed/tv/{TMDB_ID}/{season}/{episode}
-
-        autoembed:
-        movie: https://player.autoembed.cc/embed/movie/{TMDB_ID}
-        tv:    https://player.autoembed.cc/embed/tv/{TMDB_ID}/{season}/{episode}
-
-        moviesapi:
-        movie: https://moviesapi.club/movie/{TMDB_ID}
-        tv:    https://moviesapi.club/tv/{TMDB_ID}-{season}-{episode}
-
-            </pre>
-            </div>
+        <div class="checkbox-container">
+            <input type="checkbox" id="ready-checkbox">
+            <label for="ready-checkbox">Are you ready for the new site?</label>
         </div>
-        </div>
-
-        <div id="searchPage" class="page hidden">
-            <div class="max-w-7xl mx-auto px-4 py-12">
-                <h1 class="text-4xl font-bold mb-8">Search Results</h1>
-                <div id="searchResults" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <div id="mediaModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="glass-strong rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div id="modalContent" class="p-6">
-
-            </div>
-        </div>
+        <button class="btn-primary" id="redirect-btn" disabled>Launch Now!</button>
     </div>
-
-    <div id="settingsModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="glass-strong rounded-2xl max-w-lg w-full">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold">Settings</h2>
-                    <button id="closeSettings" style="color: var(--text-secondary)" class="hover:opacity-70">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="space-y-6">
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg">Dark Mode</span>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="darkModeToggle" class="sr-only peer">
-                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        </label>
-                    </div>
-
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg">Default Stream Provider</span>
-                        <select id="streamProvider" class="glass rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="pstream">PStream</option>
-                            <option value="vidsrc">VidSrc</option>
-                            <option value="multiembed">MultiEmbed</option>
-                            <option value="embedsu">EmbedSu</option>
-			                <option value="autoembed">AutoEmbed</option>
-			                <option value="moviesapi">MoviesApi</option>
-                        </select>
-                    </div>
-                    <div class="pt-4 border-t" style="border-color: var(--border)">
-                        <button id="exportConfig" class="btn-primary w-full py-3 rounded-lg font-semibold">
-                            Export Stream Config
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="streamModal" class="modal fixed inset-0 bg-black bg-opacity-90 hidden z-50 flex items-center justify-center">
-        <div class="relative w-full h-full max-w-6xl max-h-[90vh] bg-black rounded-lg overflow-hidden">
-            <button id="closeStream" class="absolute top-4 right-4 z-10 text-white hover:text-gray-300 bg-black bg-opacity-50 rounded-full p-2">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-            <div id="streamContent" class="w-full h-full">
-
-            </div>
-        </div>
-    </div>
-
     <script>
+        const checkbox = document.getElementById('ready-checkbox');
+        const button = document.getElementById('redirect-btn');
+        const body = document.body;
 
-        const apiKey = '9adc0bbf543673c5fb45ab24a36599e1';
-        const baseURL = 'https://api.themoviedb.org/3';
-        const imageBaseURL = 'https://image.tmdb.org/t/p/w500';
-        const backdropBaseURL = 'https://image.tmdb.org/t/p/w1280';
-
-        let currentPage = 'home';
-        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        let recentlyWatched = JSON.parse(localStorage.getItem('recentlyWatched') || '[]');
-        let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-        let settings = JSON.parse(localStorage.getItem('settings') || '{"theme": "auto", "streamProvider": "pstream"}');
-
-        const streamProviders = {
-        pstream: {
-            name: "PStream",
-            movie: (tmdbId) => `https://iframe.pstream.org/embed/tmdb-movie-${tmdbId}`,
-            tv: (tmdbId, season, episode) =>
-            `https://iframe.pstream.org/embed/tmdb-tv-${tmdbId}/${season}/${episode}`,
-        },
-        vidsrc: {
-            name: "VidSrc",
-            movie: (tmdbId) => `https://vidsrc.net/embed/tmdb/movie/${tmdbId}`,
-            tv: (tmdbId, season, episode) =>
-            `https://vidsrc.net/embed/tmdb/tv/${tmdbId}/${season}/${episode}`,
-        },
-        multiembed: {
-
-            name: "MultiEmbed",
-            movie: (tmdbId) => `https://multiembed.mov/directstream.php?video_id=${tmdbId}&tmdb=1`,
-            tv: (tmdbId, season, episode) =>
-            `https://multiembed.mov/directstream.php?video_id=${tmdbId}&tmdb=1&s=${season}&e=${episode}`,
-        },
-        embedsu: {
-            name: "EmbedSu",
-            movie: (tmdbId) => `https://embed.su/embed/movie/${tmdbId}`,
-            tv: (tmdbId, season, episode) =>
-            `https://embed.su/embed/tv/${tmdbId}/${season}/${episode}`,
-        },
-        autoembed: {
-            name: "AutoEmbed",
-            movie: (tmdbId) => `https://player.autoembed.cc/embed/movie/${tmdbId}`,
-            tv: (tmdbId, season, episode) =>
-            `https://player.autoembed.cc/embed/tv/${tmdbId}/${season}/${episode}`,
-        },
-        moviesapi: {
-            name: "MoviesApi",
-            movie: (tmdbId) => `https://moviesapi.club/movie/${tmdbId}`,
-            tv: (tmdbId, season, episode) =>
-            `https://moviesapi.club/tv/${tmdbId}/${season}-${episode}`,
-        },
-    };
-
-        function initTheme() {
-            const theme = settings.theme;
-            if (theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.setAttribute('data-theme', 'dark');
+        checkbox.addEventListener('change', () => {
+            button.disabled = !checkbox.checked;
+            if (checkbox.checked) {
+                button.style.opacity = '1';
+                button.style.cursor = 'pointer';
             } else {
-                document.documentElement.setAttribute('data-theme', 'light');
+                button.style.opacity = '0.5';
+                button.style.cursor = 'not-allowed';
             }
-        }
+        });
 
-        async function fetchFromTMDB(endpoint) {
-            try {
-                const response = await fetch(`${baseURL}${endpoint}?api_key=${apiKey}`);
-                return await response.json();
-            } catch (error) {
-                console.error('TMDB API Error:', error);
-                return null;
+        button.addEventListener('click', () => {
+            if (checkbox.checked) {
+                body.classList.add('redirecting');
+                setTimeout(() => {
+                    window.location.href = 'https://fmfau.org/';
+                }, 1500);
             }
-        }
-
-        async function searchTMDB(query) {
-            try {
-                const response = await fetch(`${baseURL}/search/multi?api_key=${apiKey}&query=${encodeURIComponent(query)}`);
-                return await response.json();
-            } catch (error) {
-                console.error('Search Error:', error);
-                return null;
-            }
-        }
-
-        function createMediaCard(item, isForTrending = false) {
-            const isMovie = item.media_type === 'movie' || !item.first_air_date;
-            const title = item.title || item.name;
-            const date = item.release_date || item.first_air_date;
-            const poster = item.poster_path ? `${imageBaseURL}${item.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Image';
-
-            const isFavorite = favorites.some(fav => fav.id === item.id && fav.media_type === (isMovie ? 'movie' : 'tv'));
-
-            const cardClasses = isForTrending ? 'trending-card glass rounded-2xl overflow-hidden card-hover cursor-pointer fade-in' : 'glass rounded-2xl overflow-hidden card-hover cursor-pointer fade-in';
-
-            return `
-                <div class="${cardClasses}" data-id="${item.id}" data-type="${isMovie ? 'movie' : 'tv'}">
-                    <div class="relative">
-                        <img src="${poster}" alt="${title}" class="w-full h-64 object-cover" loading="lazy">
-                        <div class="absolute top-2 right-2 space-x-2">
-                            <button class="favorite-btn ${isFavorite ? 'text-red-500' : 'text-white'} bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-70" 
-                                    data-id="${item.id}" data-type="${isMovie ? 'movie' : 'tv'}">
-                                <svg class="h-5 w-5" fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.682l-1.318-1.364a4.5 4.5 0 00-6.364 0z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                            <h3 class="text-white font-semibold text-sm mb-1">${title}</h3>
-                            <p class="text-gray-300 text-xs">${date ? new Date(date).getFullYear() : 'N/A'}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-function createProviderDropdown(id, type, season = null, episode = null) {
-    const providers = Object.keys(streamProviders);
-    const dropdownItems = providers.map(provider => 
-        `<a href="#" class="provider-option" data-provider="${provider}" data-id="${id}" data-type="${type}" data-season="${season}" data-episode="${episode}">
-            ${streamProviders[provider].name}
-        </a>`
-    ).join('');
-
-    return `
-        <div class="dropdown relative">
-           
-            <div class="dropdown-content absolute z-[9999]">
-                ${dropdownItems}
-            </div>
-        </div>
-    `;
-}
-
-        async function loadHeroSection() {
-            const trending = await fetchFromTMDB('/trending/all/day');
-            if (trending && trending.results.length > 0) {
-                const hero = trending.results[0];
-                const isMovie = hero.media_type === 'movie';
-                const title = hero.title || hero.name;
-                const overview = hero.overview;
-                const backdrop = hero.backdrop_path ? `${backdropBaseURL}${hero.backdrop_path}` : '';
-
-                document.getElementById('heroContent').innerHTML = `
-                    <div class="absolute inset-0">
-                        <img src="${backdrop}" alt="${title}" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 hero-gradient"></div>
-                    </div>
-                    <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-                        <h1 class="text-5xl md:text-7xl font-bold mb-4">${title}</h1>
-                        <p class="text-lg md:text-xl mb-8 opacity-90">${overview}</p>
-                        <div class="flex justify-center space-x-4">
-                            ${createProviderDropdown(hero.id, isMovie ? 'movie' : 'tv')}
-                            <button class="glass text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:bg-opacity-20 info-btn" 
-                                    data-id="${hero.id}" data-type="${isMovie ? 'movie' : 'tv'}">
-                                More Info
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        async function loadTrending() {
-            const trending = await fetchFromTMDB('/trending/all/day');
-            if (trending) {
-                const carousel = document.getElementById('trendingCarousel');
-		const leftBtn = document.getElementById('scrollLeft');
-		const rightBtn = document.getElementById('scrollRight');
-		const scrollAmount = 700; // Pixel Ammount
-
-		leftBtn.addEventListener('click', () => {
-			carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-		});
-
-		rightBtn.addEventListener('click', () => {
-			carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-		});
-
-                carousel.innerHTML = trending.results.map(createMediaCard).join('');
-            }
-        }
-
-        async function loadPopularMovies() {
-            const movies = await fetchFromTMDB('/movie/popular');
-            if (movies) {
-                const grid = document.getElementById('popularMovies');
-                grid.innerHTML = movies.results.slice(0, 12).map(item => createMediaCard({...item, media_type: 'movie'})).join('');
-            }
-        }
-
-        async function loadPopularTVShows() {
-            const shows = await fetchFromTMDB('/tv/popular');
-            if (shows) {
-                const grid = document.getElementById('popularTVShows');
-                grid.innerHTML = shows.results.slice(0, 12).map(item => createMediaCard({...item, media_type: 'tv'})).join('');
-            }
-        }
-
-        async function loadMoviesPage() {
-            const movies = await fetchFromTMDB('/movie/popular');
-            if (movies) {
-                const grid = document.getElementById('moviesGrid');
-                grid.innerHTML = movies.results.slice(0, 100).map(item => createMediaCard({...item, media_type: 'movie'})).join('');
-            }
-        }
-
-        async function loadTVPage() {
-            const shows = await fetchFromTMDB('/tv/popular');
-            if (shows) {
-                const grid = document.getElementById('tvGrid');
-                grid.innerHTML = shows.results.map(item => createMediaCard({...item, media_type: 'tv'})).join('');
-            }
-        }
-
-        function loadFavoritesPage() {
-            const grid = document.getElementById('favoritesGrid');
-            if (favorites.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-center py-12"><p class="text-xl text-gray-500">No favorites yet</p></div>';
-            } else {
-                grid.innerHTML = favorites.map(createMediaCard).join('');
-            }
-        }
-
-        async function showMediaModal(id, type) {
-            const modal = document.getElementById('mediaModal');
-            const content = document.getElementById('modalContent');
-
-            modal.classList.remove('hidden');
-            content.innerHTML = '<div class="flex justify-center py-12"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>';
-
-            const endpoint = type === 'movie' ? `/movie/${id}` : `/tv/${id}`;
-            const media = await fetchFromTMDB(endpoint);
-            const videos = await fetchFromTMDB(`${endpoint}/videos`);
-
-            if (media) {
-                const title = media.title || media.name;
-                const overview = media.overview;
-                const backdrop = media.backdrop_path ? `${backdropBaseURL}${media.backdrop_path}` : '';
-                const genres = media.genres ? media.genres.map(g => g.name).join(', ') : '';
-                const rating = media.vote_average ? Math.round(media.vote_average * 10) / 10 : 'N/A';
-                const trailer = videos && videos.results ? videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube') : null;
-
-                const isFavorite = favorites.some(fav => fav.id === media.id && fav.media_type === type);
-
-                content.innerHTML = `
-                    <div class="relative">
-                        <button id="closeModal" class="absolute top-4 right-4 z-10 text-white hover:text-gray-300 bg-black bg-opacity-50 rounded-full p-2">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-
-                        ${backdrop ? `
-                            <div class="relative h-64 rounded-lg overflow-hidden mb-6">
-                                <img src="${backdrop}" alt="${title}" class="w-full h-full object-cover">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-                                <div class="absolute bottom-4 left-4 right-4 text-white">
-                                    <h2 class="text-3xl font-bold mb-2">${title}</h2>
-                                    <div class="flex items-center space-x-4 text-sm">
-                                        <span class="flex items-center">
-                                            <svg class="h-4 w-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                            </svg>
-                                            ${rating}
-                                        </span>
-                                        <span>${genres}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ` : ''}
-
-                        <div class="space-y-6">
-                            <div class="flex flex-wrap gap-4">
-                                <button class="btn-primary px-6 py-3 rounded-full font-semibold flex items-center space-x-2 stream-btn" 
-                                        data-id="${media.id}" data-type="${type}">
-                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M8 5v14l11-7z"/>
-                                    </svg>
-                                    <span>Watch Now</span>
-                                </button>
-
-                                ${trailer ? `
-                                    <button class="glass px-6 py-3 rounded-full font-semibold hover:bg-white hover:bg-opacity-20 trailer-btn" 
-                                            data-key="${trailer.key}">
-                                        <span>Watch Trailer</span>
-                                    </button>
-                                ` : ''}
-
-                                <button class="favorite-btn ${isFavorite ? 'text-red-500' : 'text-gray-500'} glass px-6 py-3 rounded-full font-semibold hover:bg-white hover:bg-opacity-20" 
-                                        data-id="${media.id}" data-type="${type}">
-                                    <svg class="h-5 w-5" fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.682l-1.318-1.364a4.5 4.5 0 00-6.364 0z"></path>
-                                    </svg>
-                                </button>
-
-                                <button class="share-btn glass px-6 py-3 rounded-full font-semibold hover:bg-white hover:bg-opacity-20" 
-                                        data-id="${media.id}" data-type="${type}" data-title="${title}">
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div>
-                                <h3 class="text-xl font-semibold mb-2">Overview</h3>
-                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">${overview || 'No overview available.'}</p>
-                            </div>
-
-                            ${type === 'tv' ? `
-                                <div id="seasonsContainer">
-                                    <h3 class="text-xl font-semibold mb-4">Seasons</h3>
-                                    <div id="seasonsList" class="space-y-2">
-
-                                    </div>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-
-                if (type === 'tv' && media.seasons) {
-                    loadSeasons(media.id, media.seasons);
-                }
-            }
-        }
-
-        async function loadSeasons(showId, seasons) {
-            const seasonsList = document.getElementById('seasonsList');
-            if (!seasonsList) return;
-
-            const seasonsHTML = seasons.map(season => {
-                if (season.season_number === 0) return ''; 
-                return `
-                    <div class="glass rounded-lg p-4 season-item" data-season="${season.season_number}">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold">${season.name}</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">${season.episode_count} episodes</p>
-                            </div>
-                            <button class="btn-primary px-4 py-2 rounded-full text-sm episodes-btn" 
-                                    data-show-id="${showId}" data-season="${season.season_number}">
-                                View Episodes
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            seasonsList.innerHTML = seasonsHTML;
-        }
-
-        async function loadEpisodes(showId, seasonNumber) {
-            const episodes = await fetchFromTMDB(`/tv/${showId}/season/${seasonNumber}`);
-            if (episodes && episodes.episodes) {
-                const episodesHTML = episodes.episodes.map(episode => `
-                    <div class="glass rounded-lg p-4 mb-4 episode-item">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h5 class="font-semibold mb-1">Episode ${episode.episode_number}: ${episode.name}</h5>
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${episode.overview || 'No description available.'}</p>
-                                <p class="text-xs text-gray-500">${episode.air_date ? new Date(episode.air_date).toLocaleDateString() : 'TBA'}</p>
-                            </div>
-                            <button class="btn-primary px-4 py-2 rounded-full text-sm ml-4 stream-btn" 
-                                    data-id="${showId}" data-type="tv" data-season="${seasonNumber}" data-episode="${episode.episode_number}">
-                                Watch
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-
-                const seasonsList = document.getElementById('seasonsList');
-                seasonsList.innerHTML = `
-                    <button class="text-blue-600 hover:text-blue-800 mb-4 back-to-seasons">← Back to Seasons</button>
-                    <div class="space-y-4">
-                        ${episodesHTML}
-                    </div>
-                `;
-            }
-        }
-
-        function openStream(id, type, season = null, episode = null) {
-        const streamModal = document.getElementById('streamModal');
-        const streamContent = document.getElementById('streamContent');
-
-    const provider = streamProviders[settings.streamProvider] || streamProviders.pstream;
-    const fallbackProvider = streamProviders[settings.streamProvider === 'pstream' ? 'multiembed' : 'pstream'];
-
-    const streamURL = type === 'movie'
-        ? provider.movie(id)
-        : provider.tv(id, season, episode);
-
-    const fallbackURL = type === 'movie'
-        ? fallbackProvider.movie(id)
-        : fallbackProvider.tv(id, season, episode);
-
-    const item = { id, type, season, episode, timestamp: Date.now() };
-    recentlyWatched = [item, ...recentlyWatched.filter(r => !(r.id === id && r.type === type))].slice(0, 20);
-    localStorage.setItem('recentlyWatched', JSON.stringify(recentlyWatched));
-
-    streamContent.innerHTML = `
-        <iframe 
-            src="${streamURL}"
-            class="w-full h-full"
-            frameborder="0"
-            allowfullscreen
-            onerror="this.src='${fallbackURL}'">
-        </iframe>
-    `;
-
-    streamModal.classList.remove('hidden');
-}
-
-        function generateURLs() {
-            const id = document.getElementById("tmdbIdInput").value.trim();
-            const season = document.getElementById("seasonInput").value || 1;
-            const episode = document.getElementById("episodeInput").value || 1;
-            const type = document.getElementById("typeSelect").value;
-
-            if (!id) {
-                document.getElementById("outputBlock").textContent = "// Please enter a TMDB ID.";
-                return;
-            }
-
-            let result = "";
-
-            for (const key in providers) {
-                const p = providers[key];
-                try {
-                    const url = type === "movie"
-                        ? p.movie(id)
-                        : p.tv(id, season, episode);
-                    result += `${p.name}: ${url}\n`;
-                } catch (e) {
-                    result += `${p.name}: ⚠️ Error generating URL\n`;
-                }
-            }
-
-            document.getElementById("outputBlock").textContent = result.trim();
-        }
-
-        function toggleFavorite(id, type, element) {
-            const index = favorites.findIndex(fav => fav.id === id && fav.media_type === type);
-
-            if (index > -1) {
-                favorites.splice(index, 1);
-                element.classList.remove('text-red-500');
-                element.classList.add('text-gray-500');
-                element.querySelector('svg').setAttribute('fill', 'none');
-            } else {
-                fetchFromTMDB(type === 'movie' ? `/movie/${id}` : `/tv/${id}`).then(media => {
-                    if (media) {
-                        favorites.push({...media, media_type: type});
-                        localStorage.setItem('favorites', JSON.stringify(favorites));
-                        element.classList.remove('text-gray-500');
-                        element.classList.add('text-red-500');
-                        element.querySelector('svg').setAttribute('fill', 'currentColor');
-                    }
-                });
-            }
-
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-        }
-
-        async function performSearch(query) {
-            if (!query.trim()) return;
-
-            recentSearches = [query, ...recentSearches.filter(s => s !== query)].slice(0, 10);
-            localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
-
-            const results = await searchTMDB(query);
-            if (results) {
-                showPage('search');
-                const grid = document.getElementById('searchResults');
-                if (results.results.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-12"><p class="text-xl text-gray-500">No results found</p></div>';
-                } else {
-                    grid.innerHTML = results.results
-                        .filter(item => item.media_type !== 'person')
-                        .map(createMediaCard)
-                        .join('');
-                }
-            }
-        }
-
-        function showPage(pageName) {
-
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.add('hidden');
-                page.classList.remove('active');
-            });
-
-            const targetPage = document.getElementById(pageName + 'Page');
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-                targetPage.classList.add('active');
-            }
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active', 'text-blue-600', 'font-semibold');
-            });
-
-            const activeBtn = document.querySelector(`[data-page="${pageName}"]`);
-            if (activeBtn) {
-                activeBtn.classList.add('active', 'text-blue-600', 'font-semibold');
-            }
-
-            currentPage = pageName;
-
-            switch (pageName) {
-                case 'movies':
-                    loadMoviesPage();
-                    break;
-                case 'tv':
-                    loadTVPage();
-                    break;
-                case 'favorites':
-                    loadFavoritesPage();
-                    break;
-            }
-        }
-
-        function loadSettings() {
-            document.getElementById('darkModeToggle').checked = 
-                settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            document.getElementById('streamProvider').value = settings.streamProvider;
-        }
-
-        function saveSettings() {
-            settings = {
-                theme: document.getElementById('darkModeToggle').checked ? 'dark' : 'light',
-                streamProvider: document.getElementById('streamProvider').value,
-            };
-            localStorage.setItem('settings', JSON.stringify(settings));
-            initTheme();
-        }
-
-        function exportStreamConfig() {
-            const config = {
-                "pstream.org": {
-                    "base": "https://pstream.org",
-                    "movie": "https://pstream.org/media/{TMDB_ID}",
-                    "series": "https://pstream.org/media/{TMDB_ID}{S}/{E}"
-                },
-                "multiembed": {
-                    "movie": "https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1",
-                    "series": "https://multiembed.mov/directstream.php?video_id={TMDB_ID}&tmdb=1&s={S}&e={E}"
-                },
-                "vidsrc": {
-                    "movie": "https://vidsrc.net/embed/tt{TMDB_ID}",
-                    "series": "https://vidsrc.net/embed/tt{TMDB_ID}/{S}/{E}"
-                },
-                "embedsu": {
-                    "movie": "https://embed.su/embed/movie/{TMDB_ID}",
-                    "series": "https://embed.su/embed/tv/{TMDB_ID}/{S}/{E}"
-                },
-        	    autoembed: {
-            	    name: "AutoEmbed",
-            	    "movie": "https://player.autoembed.cc/embed/movie/{TMDB_ID}",
-            	    "series": "https://player.autoembed.cc/embed/tv/${TMDB_ID}/{S}/{E}"
-        	    },
-                moviesapi: {
-            	    name: "MoviesApi",
-            	    "movie": "https://moviesapi.club/movie/{TMDB_ID}",
-            	    "series": "https://moviesapi.club/tv/${TMDB_ID}/{S}/{E}"
-        	    },
-            };
-
-            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'stream-config.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function shareMedia(id, type, title) {
-            const url = `${window.location.origin}${window.location.pathname}#${type}/${id}`;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: `${title} - FMFAU`,
-                    text: `Check out ${title} on FMFAU`,
-                    url: url
-                });
-            } else {
-                navigator.clipboard.writeText(url).then(() => {
-                    alert('Link copied to clipboard!');
-                });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-
-            initTheme();
-            loadSettings();
-
-            loadHeroSection();
-            loadTrending();
-            loadPopularMovies();
-            loadPopularTVShows();
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    showPage(e.target.dataset.page);
-                });
-            });
-
-            document.getElementById('themeToggle').addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                settings.theme = newTheme;
-                localStorage.setItem('settings', JSON.stringify(settings));
-                document.getElementById('darkModeToggle').checked = newTheme === 'dark';
-            });
-
-            document.getElementById('searchInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    performSearch(e.target.value);
-                }
-            });
-
-            document.getElementById('settingsBtn').addEventListener('click', () => {
-                document.getElementById('settingsModal').classList.remove('hidden');
-            });
-
-            document.getElementById('closeSettings').addEventListener('click', () => {
-                document.getElementById('settingsModal').classList.add('hidden');
-            });
-
-            document.getElementById('darkModeToggle').addEventListener('change', saveSettings);
-            document.getElementById('streamProvider').addEventListener('change', saveSettings);
-
-            document.getElementById('exportConfig').addEventListener('click', exportStreamConfig);
-
-            document.addEventListener('click', (e) => {
-                if (e.target.id === 'closeModal' || e.target.closest('#closeModal')) {
-                    document.getElementById('mediaModal').classList.add('hidden');
-                }
-                if (e.target.id === 'mediaModal') {
-                    document.getElementById('mediaModal').classList.add('hidden');
-                }
-            });
-
-            document.getElementById('closeStream').addEventListener('click', () => {
-                document.getElementById('streamModal').classList.add('hidden');
-                document.getElementById('streamContent').innerHTML = '';
-            });
-
-            document.addEventListener('click', async (e) => {
-
-                if (e.target.closest('.glass[data-id]') && !e.target.closest('button')) {
-                    const card = e.target.closest('.glass[data-id]');
-                    const id = card.dataset.id;
-                    const type = card.dataset.type;
-                    showMediaModal(id, type);
-                }
-
-                if (e.target.closest('.stream-btn')) {
-                    const btn = e.target.closest('.stream-btn');
-                    const id = btn.dataset.id;
-                    const type = btn.dataset.type;
-                    const season = btn.dataset.season;
-                    const episode = btn.dataset.episode;
-                    openStream(id, type, season, episode);
-                }
-
-                if (e.target.closest('.info-btn')) {
-                    const btn = e.target.closest('.info-btn');
-                    const id = btn.dataset.id;
-                    const type = btn.dataset.type;
-                    showMediaModal(id, type);
-                }
-
-                if (e.target.closest('.favorite-btn')) {
-                    e.stopPropagation();
-                    const btn = e.target.closest('.favorite-btn');
-                    const id = parseInt(btn.dataset.id);
-                    const type = btn.dataset.type;
-                    toggleFavorite(id, type, btn);
-                }
-
-                if (e.target.closest('.share-btn')) {
-                    const btn = e.target.closest('.share-btn');
-                    const id = btn.dataset.id;
-                    const type = btn.dataset.type;
-                    const title = btn.dataset.title;
-                    shareMedia(id, type, title);
-                }
-
-                if (e.target.closest('.trailer-btn')) {
-                    const btn = e.target.closest('.trailer-btn');
-                    const key = btn.dataset.key;
-                    window.open(`https://www.youtube.com/watch?v=${key}`, '_blank');
-                }
-
-                if (e.target.closest('.episodes-btn')) {
-                    const btn = e.target.closest('.episodes-btn');
-                    const showId = btn.dataset.showId;
-                    const season = btn.dataset.season;
-                    loadEpisodes(showId, season);
-                }
-
-                if (e.target.closest('.back-to-seasons')) {
-                    const seasonsContainer = document.getElementById('seasonsContainer');
-                    if (seasonsContainer) {
-
-                        location.reload(); 
-                    }
-                }
-            });
-
-            function handleHashChange() {
-                const hash = window.location.hash.slice(1);
-                if (hash) {
-                    const [type, id] = hash.split('/');
-                    if (type && id && (type === 'movie' || type === 'tv')) {
-                        showMediaModal(id, type);
-                    }
-                }
-            }
-
-            window.addEventListener('hashchange', handleHashChange);
-            handleHashChange();
         });
     </script>
 </body>
