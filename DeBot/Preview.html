@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>DeBot Site Preview</title>
+</head>
+<body>
+<script>
+function getParameterByName(name) {
+  const url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  const results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+const htmlData = getParameterByName('data');
+
+if (htmlData) {
+  document.open();
+  document.write(htmlData);
+  document.close();
+} else {
+  document.body.innerHTML = "<h2>No HTML data provided in URL</h2>";
+}
+</script>
+</body>
+</html>
