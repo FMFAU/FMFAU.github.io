@@ -9,50 +9,7 @@
 <script>
 function getParameterByName(name) {
   const url = window.location.href;
-  name = name.replace(/[\[\]]/g, '\\<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>DeBot Site Preview</title>
-</head>
-<body>
-<script>
-function getParameterByName(name) {
-  const url = window.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-  const results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-function decompressFromURL(compressed) {
-  try {
-    const decoded = atob(compressed);
-    return decoded;
-  } catch (e) {
-    console.error('Decompression error:', e);
-    return null;
-  }
-}
-
-const htmlData = getParameterByName('data');
-if (htmlData) {
-  const decompressed = decompressFromURL(htmlData);
-  if (decompressed) {
-    document.open();
-    document.write(decompressed);
-    document.close();
-  } else {
-    document.body.innerHTML = "<h2>Error: Could not decompress HTML data</h2>";
-  }
-} else {
-  document.body.innerHTML = "<h2>No HTML data provided in URL</h2>";
-}
-</script>
-</body>
-</html>');
   const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
   const results = regex.exec(url);
   if (!results) return null;
@@ -69,14 +26,14 @@ if (htmlData) {
       document.write(decompressed);
       document.close();
     } else {
-      document.body.innerHTML = "<h2>Error: Could not decompress HTML data</h2>";
+      document.body.innerHTML = '<h2>Error: Could not decompress HTML data</h2>';
     }
   } catch (e) {
     console.error('Decompression error:', e);
-    document.body.innerHTML = "<h2>Error: Could not decompress HTML data</h2>";
+    document.body.innerHTML = '<h2>Error: Could not decompress HTML data</h2>';
   }
 } else {
-  document.body.innerHTML = "<h2>No HTML data provided in URL</h2>";
+  document.body.innerHTML = '<h2>No HTML data provided in URL</h2>';
 }
 </script>
 </body>
