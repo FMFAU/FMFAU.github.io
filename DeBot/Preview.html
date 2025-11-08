@@ -3,6 +3,17 @@
 <head>
 <meta charset="utf-8">
 <title>DeBot Site Preview</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+</head>
+<body>
+<script>
+function getParameterByName(name) {
+  const url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>DeBot Site Preview</title>
 </head>
 <body>
 <script>
@@ -34,6 +45,34 @@ if (htmlData) {
     document.write(decompressed);
     document.close();
   } else {
+    document.body.innerHTML = "<h2>Error: Could not decompress HTML data</h2>";
+  }
+} else {
+  document.body.innerHTML = "<h2>No HTML data provided in URL</h2>";
+}
+</script>
+</body>
+</html>');
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  const results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return results[2].replace(/\+/g, ' ');
+}
+
+const htmlData = getParameterByName('data');
+if (htmlData) {
+  try {
+    const decompressed = LZString.decompressFromEncodedURIComponent(htmlData);
+    if (decompressed) {
+      document.open();
+      document.write(decompressed);
+      document.close();
+    } else {
+      document.body.innerHTML = "<h2>Error: Could not decompress HTML data</h2>";
+    }
+  } catch (e) {
+    console.error('Decompression error:', e);
     document.body.innerHTML = "<h2>Error: Could not decompress HTML data</h2>";
   }
 } else {
