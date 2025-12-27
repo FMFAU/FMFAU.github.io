@@ -36,6 +36,8 @@ queue_on_teleport([[
         end
     end)
 
+    task.wait(10)
+
     task.spawn(function()
         while true do
             task.wait(0.3)
@@ -51,7 +53,7 @@ queue_on_teleport([[
         end
     end)
 
-    task.wait(70)
+    task.wait(60)
     
     _tp:Teleport(_place, _player)
 ]])
