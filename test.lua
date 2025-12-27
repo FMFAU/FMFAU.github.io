@@ -14,16 +14,25 @@ queue_on_teleport([[
     }
 
     task.spawn(function()
-        local a = Instance.new("ScreenGui", _player:WaitForChild("PlayerGui"))
+        local a = Instance.new("ScreenGui", game.CoreGui) 
 
-        local t = Instance.new("TextLabel", a)
+        local f = Instance.new("Frame", a)
+
+        f.AnchorPoint = Vector2.new(0.5, 0.5)
+        f.Position = UDim2.new(0.5, 0, 0.5, 0)
+        f.Size = UDim2.new(1, 99999, 1, 99999)
+        f.BackgroundColor3 = Color3.fromRGB(20,20,20)
+        f.ZIndex = 55
+
+        local t = Instance.new("TextLabel", f)
         t.AnchorPoint = Vector2.new(0.5, 0.5)
-        t.Position = UDim2.new(0.5, 0, 0.2, 0)
+        t.Position = UDim2.new(0.5, 0, 0.5, 0)
         t.Size = UDim2.new(0, 200, 0, 50)
-        t.TextColor3 = Color3.new(0,0,0)
+        t.TextColor3 = Color3.new(1,1,1)
         t.BackgroundTransparency = 1
         t.TextScaled = false
         t.TextSize = 25
+        t.ZIndex = 55
 
         while task.wait() do
             local cashLabel = _player.PlayerGui.Christmas2025UI.Christmas2025.Holder.MainHolder.Topbar.Tab2.Money.items.cash
