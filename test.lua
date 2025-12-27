@@ -17,6 +17,27 @@ queue_on_teleport([[
         workspace.Game.LiveOpsPersistent.Christmas2025.Spawners.ElfHunt
     }
 
+    task.spawn(function()
+        local a = Instance.new("ScreenGui", game.CoreGui)
+    
+        local t = Instance.new("TextLabel", a)
+        t.AnchorPoint = Vector2.new(0.5, 0.5)
+        t.Position = UDim2.new(0.5, 0, 0.2, 0)
+        t.Size = UDim2.new(0, 200, 0, 50)
+        t.TextColor3 = Color3.new(1,1,1)
+        t.BackgroundTransparency = 1
+        t.TextScaled = false
+        t.TextSize = 25
+    
+        while task.wait() do 
+            local cashLabel = game.Players.LocalPlayer.PlayerGui.Christmas2025UI.Christmas2025.Holder.MainHolder.Topbar.Tab2.Money.items.cash
+            local cashText = cashLabel and cashLabel.Text or "0"
+            t.Text = "Current Cookies\n\n" .. cashText
+        end
+    end)
+
+
+
     task.wait(25)
 
     task.spawn(function()
