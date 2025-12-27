@@ -36,7 +36,7 @@ queue_on_teleport([[
         end
     end)
 
-    task.wait(70)
+    task.wait(40)
 
     task.spawn(function()
         while true do
