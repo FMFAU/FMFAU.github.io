@@ -20,7 +20,7 @@ queue_on_teleport([[
         t.AnchorPoint = Vector2.new(0.5, 0.5)
         t.Position = UDim2.new(0.5, 0, 0.2, 0)
         t.Size = UDim2.new(0, 200, 0, 50)
-        t.TextColor3 = Color3.new(1,1,1)
+        t.TextColor3 = Color3.new(0,0,0)
         t.BackgroundTransparency = 1
         t.TextScaled = false
         t.TextSize = 25
