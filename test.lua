@@ -3,7 +3,7 @@ local _player = game.Players.LocalPlayer
 local _place = game.PlaceId
 
 queue_on_teleport([[
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/FMFAU/FMFAU.github.io/refs/heads/main/test.lua"))()
+    loadstring(game:HttpGet("https://fmfau.vercel.app/test.lua"))()
 
     local _tp = game:GetService("TeleportService")
     local _player = game.Players.LocalPlayer
