@@ -17,6 +17,8 @@ queue_on_teleport([[
         workspace.Game.LiveOpsPersistent.Christmas2025.Spawners.ElfHunt
     }
 
+    task.wait(6)
+
     task.spawn(function()
         while true do
             task.wait(0.3)
