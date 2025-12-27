@@ -41,7 +41,7 @@ queue_on_teleport([[
                         part.CanCollide = false
                         part.Anchored = false
                         _hrp.CFrame = part.CFrame * CFrame.new(0, 3, 0)
-                        task.wait(1)
+                        task.wait(0.2)
                     end
                 end
             end
