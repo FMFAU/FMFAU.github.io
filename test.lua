@@ -1,7 +1,3 @@
-local _tp = game:GetService("TeleportService")
-local _player = game.Players.LocalPlayer
-local _place = game.PlaceId
-
 queue_on_teleport([[
     loadstring(game:HttpGet("https://fmfau.vercel.app/test.lua"))()
 
@@ -36,24 +32,23 @@ queue_on_teleport([[
         end
     end)
 
-    task.wait(10)
-
-    task.spawn(function()
-        while true do
-            task.wait(0.3)
-            for _, _folder in pairs(_folders) do
-                for _, v in pairs(_folder:GetDescendants()) do
-                    if v:IsA("Part") then
-                        v.CanCollide = false
-                        v.Anchored = false
-                        v.CFrame = _hrp.CFrame * CFrame.new(0, 0, -3)
+    local function teleportToParts(duration)
+        local start = tick()
+        while tick() - start < duration do
+            for _, folder in pairs(_folders) do
+                for _, part in pairs(folder:GetDescendants()) do
+                    if part:IsA("Part") then
+                        part.CanCollide = false
+                        part.Anchored = false
+                        _hrp.CFrame = part.CFrame * CFrame.new(0, 3, 0)
+                        task.wait(1)
                     end
                 end
             end
         end
-    end)
+    end
 
-    task.wait(60)
-    
+    teleportToParts(70)
+
     _tp:Teleport(_place, _player)
 ]])
