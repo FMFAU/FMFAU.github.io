@@ -18,8 +18,8 @@ queue_on_teleport([[
     }
 
     task.spawn(function()
-        local a = Instance.new("ScreenGui", game.CoreGui)
-    
+        local a = Instance.new("ScreenGui", _player:WaitForChild("PlayerGui"))
+
         local t = Instance.new("TextLabel", a)
         t.AnchorPoint = Vector2.new(0.5, 0.5)
         t.Position = UDim2.new(0.5, 0, 0.2, 0)
@@ -28,17 +28,15 @@ queue_on_teleport([[
         t.BackgroundTransparency = 1
         t.TextScaled = false
         t.TextSize = 25
-    
-        while task.wait() do 
-            local cashLabel = game.Players.LocalPlayer.PlayerGui.Christmas2025UI.Christmas2025.Holder.MainHolder.Topbar.Tab2.Money.items.cash
+
+        while task.wait() do
+            local cashLabel = _player.PlayerGui.Christmas2025UI.Christmas2025.Holder.MainHolder.Topbar.Tab2.Money.items.cash
             local cashText = cashLabel and cashLabel.Text or "0"
-            t.Text = "Current Cookies\n\n" .. cashText
+            t.Text = "Auto Farmer Running...\nCurrent Cookies\n\n" .. cashText
         end
     end)
 
-
-
-    task.wait(25)
+    task.wait(70)
 
     task.spawn(function()
         while true do
@@ -55,6 +53,6 @@ queue_on_teleport([[
         end
     end)
 
-    task.wait(15)
+    task.wait(10)
     _tp:Teleport(_place, _player)
 ]])
