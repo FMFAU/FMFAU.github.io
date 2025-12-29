@@ -748,7 +748,7 @@ task.spawn(function()
                     
                     queue_on_teleport([[
                         repeat task.wait() until game:IsLoaded()
-                        loadstring(game:HttpGet("https://raw.githubusercontent.com/FMFAU/FMFAU.github.io/refs/heads/main/test2.lua"))()
+                        loadstring(game:HttpGet("https://fmfau.vercel.app/test2.lua"))()
                         task.wait(0.003)
                         _G.config.farming.Enabled = true
                         _G.config.farming.SuperFarm = true
