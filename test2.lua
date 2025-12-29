@@ -747,6 +747,7 @@ task.spawn(function()
                     writefile("LongDrive/Arrests", tostring(_G.config.farming.Arrested))
                     
                     queue_on_teleport([[
+                        print("Welcome Back!")
                         repeat task.wait() until game:IsLoaded()
                         loadstring(game:HttpGet("https://raw.githubusercontent.com/FMFAU/FMFAU.github.io/refs/heads/main/test2.lua"))()
                         task.wait(0.003)
