@@ -631,7 +631,7 @@ task.spawn(function()
 end)
 ------------<
 
---Arrest Farm
+--Arrest Farm-->
 task.spawn(function()
     local function ChangeTeam(name)
         Remotes:WaitForChild("RequestEndJobSession"):FireServer("jobPad")
@@ -747,9 +747,8 @@ task.spawn(function()
                     writefile("LongDrive/Arrests", tostring(_G.config.farming.Arrested))
                     
                     queue_on_teleport([[
-                        print("Welcome Back!")
                         repeat task.wait() until game:IsLoaded()
-                        loadstring(game:HttpGet("https://raw.githubusercontent.com/FMFAU/FMFAU.github.io/refs/heads/main/test2.lua"))()
+                        loadstring(game:HttpGet("YOUR_MAIN_SCRIPT_URL_HERE"))()
                         task.wait(0.003)
                         _G.config.farming.Enabled = true
                         _G.config.farming.SuperFarm = true
@@ -779,24 +778,60 @@ task.spawn(function()
 
         local target, bounty = FindTarget()
         
-        if (not target or bounty == 0) and count > 0 then
-            local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-            
-            if hrp then
-                for i, pos in pairs(positions) do
-                    if not _G.config.farming.Enabled then break end
+        if not target or bounty == 0 then
+            if _G.config.farming.SuperFarm then
+                noOutlawTimer = noOutlawTimer + 0.1
+                
+                if noOutlawTimer >= 10 then
+                    writefile("LongDrive/Arrests", tostring(_G.config.farming.Arrested))
                     
-                    hrp.CFrame = CFrame.new(pos)
+                    queue_on_teleport([[
+                        repeat task.wait() until game:IsLoaded()
+                        loadstring(game:HttpGet("YOUR_MAIN_SCRIPT_URL_HERE"))()
+                        task.wait(0.003)
+                        _G.config.farming.Enabled = true
+                        _G.config.farming.SuperFarm = true
+                    ]])
                     
-                    for j = 1, 3 do
-                        task.wait()
-                        target, bounty = FindTarget()
-                        if target and bounty > 0 then break end
+                    NotificationLibrary:Notify({
+                        Title = "Server Hopping",
+                        Text = "No bounties, switching servers...",
+                        Type = "Info",
+                        Duration = 3
+                    })
+                    
+                    task.wait(1)
+                    
+                    local TeleportService = game:GetService("TeleportService")
+                    local HttpService = game:GetService("HttpService")
+                    
+                    local success, servers = pcall(function()
+                        return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"))
+                    end)
+                    
+                    if success and servers and servers.data then
+                        local currentJobId = game.JobId
+                        for _, server in pairs(servers.data) do
+                            if server.id ~= currentJobId and server.playing < server.maxPlayers then
+                                pcall(function()
+                                    TeleportService:TeleportToPlaceInstance(game.PlaceId, server.id, LocalPlayer)
+                                end)
+                                break
+                            end
+                        end
+                    else
+                        pcall(function()
+                            TeleportService:Teleport(game.PlaceId, LocalPlayer)
+                        end)
                     end
-                    
-                    if target and bounty > 0 then break end
+                    break
                 end
+            else
+                task.wait(2)
             end
+            continue
+        else
+            noOutlawTimer = 0
         end
         
         if target and bounty > 0 then
@@ -834,3 +869,4 @@ task.spawn(function()
         end
     end
 end)
+---------------<
