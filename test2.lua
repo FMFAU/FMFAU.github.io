@@ -632,6 +632,7 @@ end)
 ------------<
 
 --Arrest Farm-->
+--Arrest Farm
 task.spawn(function()
     local function ChangeTeam(name)
         Remotes:WaitForChild("RequestEndJobSession"):FireServer("jobPad")
@@ -763,9 +764,28 @@ task.spawn(function()
                     
                     task.wait(1)
                     
-                    pcall(function()
-                        game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
+                    local TeleportService = game:GetService("TeleportService")
+                    local HttpService = game:GetService("HttpService")
+                    
+                    local success, servers = pcall(function()
+                        return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"))
                     end)
+                    
+                    if success and servers and servers.data then
+                        local currentJobId = game.JobId
+                        for _, server in pairs(servers.data) do
+                            if server.id ~= currentJobId and server.playing < server.maxPlayers then
+                                pcall(function()
+                                    TeleportService:TeleportToPlaceInstance(game.PlaceId, server.id, LocalPlayer)
+                                end)
+                                break
+                            end
+                        end
+                    else
+                        pcall(function()
+                            TeleportService:Teleport(game.PlaceId, LocalPlayer)
+                        end)
+                    end
                     break
                 end
             else
